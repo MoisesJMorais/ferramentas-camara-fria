@@ -1,0 +1,45 @@
+<!-- Desenvolvido por Moisés J. M. Lima | WhatsApp (44) 99732-6752 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    
+    body {
+      margin: 0;
+    }
+  
+    .title-fixed-ferramentas-camara-fria {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      margin: 0;
+      padding: 5px 0;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-align: center;
+      text-transform: none;
+      color: #a0a0a0;
+      background-color: #000000;
+      z-index: 1000;
+    }
+  
+    .title-fixed-ferramentas-camara-fria::after {
+      content: "";
+      position: absolute;
+      top: 100%; /* Cola na base do header e desce */
+      left: 0;
+      width: 100%;
+      height: 20px; /* Altura do efeito de sumiço */
+      /* Vai do preto puro ao transparente */
+      background: linear-gradient(to bottom, #000000, rgba(0, 0, 0, 0));
+      pointer-events: none;
+    }
+    
+  </style>
+  
+  <header>
+    <p class="title-fixed-ferramentas-camara-fria">Ferramentas Câmara Fria</p>
+  </header>
