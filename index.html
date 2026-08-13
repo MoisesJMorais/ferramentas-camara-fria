@@ -1,0 +1,190 @@
+---
+---
+<!-- Desenvolvido por Moisés J. M. Lima | WhatsApp (44) 99732-6752 -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    {% include default-config.html %}
+    
+    <title>Ferramentas Câmara Fria</title>
+    <link rel="icon" href="img/favicon.ico" type="image/png">
+    <link rel="manifest" href="/prats/camara-fria/manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="/prats/security.js"></script>
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Roboto, system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #1a1a1a;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            overscroll-behavior-y: auto;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 16px;
+        }
+        
+        /* CONTENT GRID */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            margin-top: 55px;
+        }
+
+        @media (max-width: 768px) {
+            .icon-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+            }
+
+            .hide-on-mobile {
+                display: none !important;
+            }
+        }
+
+        .favorite-icon {
+            background-color: #121212;
+            border: 2px solid #121212;
+            border-radius: 12px;
+            padding: 12px 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .favorite-icon:hover {
+            background-color: #121212;
+            border-color: #00e5ff;
+        }
+
+        .favorite-icon a {
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .favorite-icon img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 6px;
+            border-radius: 12px;
+        }
+
+        .favorite-icon span {
+            display: block;
+            font-size: 10px;
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+    </style>
+</head>
+    {% include title-fixed.html %}
+<body>
+    
+<div class="content">
+    <div class="icon-grid" id="iconGrid">
+        <div class="favorite-icon hide-on-mobile" id="atalho-restrito" style="display: none;">
+            <a href="https://moisesjmorais.github.io/prats/camara-fria/gestao-de-reprocessos/login-rep-nfc.html" rel="noreferrer" onclick="window.open(this.href, 'REPNFC_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
+                <img src="https://moisesjmorais.github.io/prats/camara-fria/gestao-de-reprocessos/favicon-rep-nfc.ico">
+                <span>Gestão de Reprocessos</span>
+            </a>
+        </div>
+        <div class="favorite-icon">
+            <a href="https://moisesjmorais.github.io/prats/camara-fria/calculadora-picking.html" target="_self" rel="noreferrer">
+                <img src="https://moisesjmorais.github.io/prats/camara-fria/favicons/calculadora-picking.ico">
+                <span>Calcular Picking</span>
+            </a>
+        </div>
+        <div class="favorite-icon">
+            <a href="https://moisesjmorais.github.io/prats/camara-fria/calculadora-de-baias.html" target="_self" rel="noreferrer">
+                <img src="https://cdn-icons-png.flaticon.com/512/5396/5396758.png">
+                <span>Calcular Baias</span>
+            </a>
+        </div>
+        <div class="favorite-icon">
+            <a href="https://moisesjmorais.github.io/prats/camara-fria/calculadora-producao.html" target="_self" rel="noreferrer">
+                <img src="https://moisesjmorais.github.io/prats/camara-fria/favicons/calculadora-producao.ico">
+                <span>Calcular Produção</span>
+            </a>
+        </div>
+        <div class="favorite-icon">
+            <a href="https://moisesjmorais.github.io/prats/camara-fria/lote-nfc-2026.html" target="_self" rel="noreferrer">
+                <img src="https://moisesjmorais.github.io/prats/camara-fria/favicons/lote-nfc-2026.ico">
+                <span>Lote de Hoje</span>
+            </a>
+        </div>
+        <div class="favorite-icon">
+            <a href="https://moisesjmorais.github.io/prats/camara-fria/escala-folgas.html" target="_self" rel="noreferrer">
+                <img src="https://cdn-icons-png.flaticon.com/512/3633/3633137.png">
+                <span>Escala de Folgas</span>
+            </a>
+        </div>
+        <div class="favorite-icon">
+            <a href="http://10.1.1.29/" rel="noreferrer" onclick="window.open(this.href, 'SMDIA_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
+                <img src="https://moisesjmorais.github.io/prats/img/SMDIA.png">
+                <span>SMDIA</span>
+            </a>
+        </div>
+        <div class="favorite-icon">
+            <a href="https://app.smdia.com.br/supervisor.html" rel="noreferrer" onclick="window.open(this.href, 'SMDIA4_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
+                <img src="https://moisesjmorais.github.io/prats/camara-fria/icons/smdia4.ico">
+                <span>SMDIA 4.0</span>
+            </a>
+        </div>
+        <div class="favorite-icon">            
+            <a href="https://app.livemes.com/" rel="noreferrer" onclick="window.open(this.href, 'LiveMes_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">                
+                <img src="https://moisesjmorais.github.io/prats/img/livemes.jpg" rel="noreferrer">                
+                <span>LiveMes</span>            
+            </a>        
+        </div>
+        <div class="favorite-icon">
+            <a href="http://10.1.1.73:7070/dashboard/111-01-etiquetas" rel="noreferrer" onclick="window.open(this.href, 'METABASE_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
+                <img src="https://cdn-1.webcatalog.io/catalog/metabase/metabase-icon-filled-256.png?v=1714775110490">
+                <span>Etiquetas WMS</span>
+            </a>
+        </div>
+        <div class="favorite-icon">
+            <a href="https://sucospratsservices.engeman.com:30289/" rel="noreferrer" onclick="window.open(this.href, 'ENGEMAN_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
+                <img src="https://moisesjmorais.github.io/prats/img/engeman.png">
+                <span>Engeman</span>
+            </a>
+        </div>
+        <div class="favorite-icon">
+            <a href="https://suporte.prats.com.br/" rel="noreferrer" onclick="window.open(this.href, 'GLPI_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
+                <img src="https://archive.org/services/img/github.com-glpi-project-glpi_-_2019-09-23_08-18-36">
+                <span>Suporte GLPI</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Executa assim que a página carrega
+document.addEventListener("DOMContentLoaded", function() {
+    // Verifica se a chave secreta está salva no navegador e libera o atalho
+    if (localStorage.getItem("atalho_chave") === "ativo") {
+        document.getElementById("atalho-restrito").style.display = "block";
+    }
+});
+</script>
+</body>
+    {% include signature.html %}
+</html>
