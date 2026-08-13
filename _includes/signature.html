@@ -1,0 +1,58 @@
+<!-- Desenvolvido por Moisés J. M. Lima | WhatsApp: (44) 99732-6752 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aguafina+Script&display=swap" rel="stylesheet">
+  
+  <style>
+      footer {
+          position: fixed;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          background-color: #000000;
+          padding: 5px 0px;
+      }
+  
+      footer::before {
+          content: "";
+          position: absolute;
+          bottom: 100%; /* Posiciona exatamente colado na parte de cima do footer */
+          left: 0;
+          width: 100%;
+          height: 20px; /* Altura da sua sombra (ajuste como quiser) */
+          /* Vai do transparente (no topo) ao preto total (colado no footer) */
+          background: linear-gradient(to top, #000000, rgba(0, 0, 0, 0));
+          pointer-events: none; /* Garante que o usuário consiga clicar no texto por baixo */
+      }
+      .signature-text {
+          text-align: center;
+          color: #a0a0a0;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          font-size: 0.5rem;
+          letter-spacing: 0.5px;
+          margin: 0;
+          display: inline-block;
+          vertical-align: middle;
+      }
+  
+      .signature-name {
+          text-align: center;
+          font-family: 'Aguafina Script', cursive;
+          color: #a0a0a0;
+          font-size: 1.3rem;
+          margin-left: 6px;
+          display: inline-block;
+          vertical-align: middle;
+      }
+  
+  </style>
+  
+  <footer>
+      <p class="signature-text">
+          Orgulhosamente desenvolvido por<br><span class="signature-name">Moisés J. Morais Lima</span>
+      </p>
+  </footer>
