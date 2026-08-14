@@ -128,54 +128,55 @@
         </div>
     </div>
 </div>
-
-<script>
-    // Removido a propriedade 'l' (litros) dos objetos, mantendo apenas o fator de multiplicação
-    const skus = [
-        { n: "200 ML", f: 3960 },
-        { n: "300 ML", f: 2880 },
-        { n: "900 ML", f: 1224 },
-        { n: "1,5 LT", f: 600 },
-        { n: "3 LT", f: 280 },
-        { n: "5 LT", f: 168 }
-    ];
-
-    const state = skus.map(() => ({ p: 0, u: 0 }));
-
-    function render() {
-    document.getElementById('skuList').innerHTML = skus.map((s, i) => `
-        <div class="sku-row">
-            <div class="sku-name">${s.n} <span>Pallet: ${s.f} un</span></div>
-            <div class="inputs-group">
-                <input type="number" placeholder="Pallets" 
-                       oninput="if(this.value.length > 3) this.value = this.value.slice(0,3); upd(${i},'p',this.value)">
-                
-                <input type="number" placeholder="Picking" 
-                       oninput="if(this.value.length > 4) this.value = this.value.slice(0,4); upd(${i},'u',this.value)">
-            </div>
-            <div class="row-total units" id="ru-${i}">0</div>
-        </div>
-    `).join('');
-	}
-
-    function upd(i, t, v) {
-        state[i][t] = Number(v) || 0;
-        const rowUn = (state[i].p * skus[i].f) + state[i].u;
-        
-        // Atualiza o total da linha
-        document.getElementById(`ru-${i}`).innerText = rowUn.toLocaleString();
-
-        // Calcula e atualiza o total geral
-        let gUn = 0;
-        state.forEach((val, idx) => {
-            gUn += (val.p * skus[idx].f) + val.u;
-        });
-
-        document.getElementById('grandUn').innerText = gUn.toLocaleString();
-    }
-
-    render();
-</script>
+	
+	<script src="js/security.js"></script>
+	
+	<script>
+	    const skus = [
+	        { n: "200 ML", f: 3960 },
+	        { n: "300 ML", f: 2880 },
+	        { n: "900 ML", f: 1224 },
+	        { n: "1,5 LT", f: 600 },
+	        { n: "3 LT", f: 280 },
+	        { n: "5 LT", f: 168 }
+	    ];
+	
+	    const state = skus.map(() => ({ p: 0, u: 0 }));
+	
+	    function render() {
+	    document.getElementById('skuList').innerHTML = skus.map((s, i) => `
+	        <div class="sku-row">
+	            <div class="sku-name">${s.n} <span>Pallet: ${s.f} un</span></div>
+	            <div class="inputs-group">
+	                <input type="number" placeholder="Pallets" 
+	                       oninput="if(this.value.length > 3) this.value = this.value.slice(0,3); upd(${i},'p',this.value)">
+	                
+	                <input type="number" placeholder="Picking" 
+	                       oninput="if(this.value.length > 4) this.value = this.value.slice(0,4); upd(${i},'u',this.value)">
+	            </div>
+	            <div class="row-total units" id="ru-${i}">0</div>
+	        </div>
+	    `).join('');
+		}
+	
+	    function upd(i, t, v) {
+	        state[i][t] = Number(v) || 0;
+	        const rowUn = (state[i].p * skus[i].f) + state[i].u;
+	        
+	        // Atualiza o total da linha
+	        document.getElementById(`ru-${i}`).innerText = rowUn.toLocaleString();
+	
+	        // Calcula e atualiza o total geral
+	        let gUn = 0;
+	        state.forEach((val, idx) => {
+	            gUn += (val.p * skus[idx].f) + val.u;
+	        });
+	
+	        document.getElementById('grandUn').innerText = gUn.toLocaleString();
+	    }
+	
+	    render();
+	</script>
 </body>
 	{% include signature.html %}
 </html>
