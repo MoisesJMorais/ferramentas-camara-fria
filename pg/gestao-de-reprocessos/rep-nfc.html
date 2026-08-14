@@ -1,0 +1,589 @@
+<!-- Desenvolvido por Moisés J. M. Lima | WhatsApp (44) 99732-6752 -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon-rep-nfc.ico" type="image/x-icon">
+    <title>Painel de Gestão de Reprocessos</title>
+    <script src="auth.js"></script>
+    <script>
+        verificarAutenticacao();
+    </script>
+    <script src="https://moisesjmorais.github.io/ferramentas-camara-fria/js/security.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        /* BLOQUEIO MOBILE */
+        .mobile-warning { display: none; }
+        @media (max-width: 767px) {
+            html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #ffffff; }
+            .container { display: none !important; }
+            .mobile-warning {
+                 display: flex !important; flex-direction: column; align-items: center; justify-content: center;
+                 position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffffff;
+                 z-index: 999999; padding: 20px; box-sizing: border-box; text-align: center; font-family: 'Segoe UI', sans-serif;
+            }
+            .mobile-warning .icon { font-size: 64px; margin-bottom: 20px; }
+            .mobile-warning h1 { color: #e74c3c; font-size: 26px; margin: 0 0 15px 0; }
+        }
+        /* ESTILOS DESKTOP */
+        body { font-family: 'Segoe UI', sans-serif; background-color: #e9ecef; margin: 10px; }
+        .container {
+             max-width: 98%;
+             margin: auto;
+             background: white;
+             padding: 20px;
+             border-radius: 12px;
+             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+             min-height: 95vh;
+             display: flex;
+             flex-direction: column;
+             box-sizing: border-box;
+        }
+        .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #f1f2f6; padding-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .header-app h2 { color: #2c3e50; border-left: 5px solid #27ae60; padding-left: 15px; margin: 0; font-size: 1.5rem; }
+        .header-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+        .section-title {
+             font-size: 13px;
+             font-weight: 800;
+             color: #1a252f;
+             text-transform: uppercase;
+             margin-bottom: 5px;
+             margin-left: 2px;
+        }
+        .panel { background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #dee2e6; }
+        .grid-inputs {
+             display: grid;
+             grid-template-columns: repeat(8, 1fr);
+             gap: 8px;
+        }
+        input, select, button {
+             padding: 10px;
+             border: 1px solid #cbd5e0;
+             border-radius: 6px;
+             font-size: 14px;
+             width: 100%;
+             box-sizing: border-box;
+        }
+        button { cursor: pointer; border: none; font-weight: bold; transition: 0.2s; white-space: nowrap; }
+        .btn-add { background-color: #27ae60; color: white; height: 100%; }
+        .btn-util { color: white; padding: 8px 15px; font-size: 11px; width: auto; }
+        .btn-json { background-color: #34495e; }
+        .btn-pdf { background-color: #e74c3c; }
+        .btn-import { background-color: #8e44ad; }
+        .btn-logs { background-color: #d35400; }
+        .btn-tabela {
+             font-size: 10px; height: 24px; padding: 0 8px; border-radius: 4px; display: inline-flex;
+             align-items: center; justify-content: center; vertical-align: middle; line-height: 1; margin: 0 1px; width: auto;
+        }
+        .btn-status { background-color: #444 !important; color: white !important; min-width: 60px; }
+        .btn-acao-curto { width: 26px; padding: 0; font-size: 12px; min-width: unset; }
+        .btn-excluir { background-color: #e74c3c !important; color: white !important; }
+        .btn-editar { background-color: #2980b9 !important; color: white !important; }
+        
+        /* TABELA COM COLUNAS FIXAS E SCROLL */
+        .table-responsive { 
+            flex-grow: 1; 
+            overflow: auto; 
+            border: 0.25px solid #7f8c8d; 
+            border-radius: 4px; 
+            position: relative;
+        }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: auto; }
+        th, td { 
+            padding: 1px 4px; 
+            border: 0.25px solid #7f8c8d; 
+            text-align: center; 
+            font-weight: 600; 
+            font-size: 13px; 
+            line-height: 1.2; 
+            white-space: nowrap;
+        }
+        th { background-color: #000000; color: #ffffff; font-size: 12px; z-index: 2; }
+        
+        /* Colunas Fixas */
+        .col-fixed-id { position: sticky; left: 0; z-index: 3; background-color: inherit; min-width: 50px; }
+        .col-fixed-acoes { position: sticky; right: 0; z-index: 3; background-color: #f0f0f0 !important; color: #000 !important; width: 1%; }
+        
+        th.col-fixed-id { z-index: 4; background-color: #000000 !important; color: #ffffff !important; }
+        th.col-fixed-acoes { z-index: 4; background-color: #000000 !important; color: #ffffff !important; }
+
+        .col-motivo { min-width: 200px; text-align: left; }
+
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px; padding-bottom: 5px; }
+        .btn-page { background: #bdc3c7; color: #000000; padding: 8px 15px; width: auto; border: 1px solid #95a5a6; }
+        .btn-page:hover:not(:disabled) { background: #aab2b7; }
+        .btn-page:disabled { background: #e0e0e0; color: #7f8c8d; cursor: not-allowed; border-color: #ccc; }
+        
+        /* Cores de Sabores */
+        .sabor-laranja td { background-color: #ffe082 !important; color: #000 !important; }
+        .sabor-fruitz-laranja td { background-color: #ffc107 !important; color: #000 !important; }
+        .sabor-uva td { background-color: #d1c4e9 !important; color: #000 !important; }
+        .sabor-fruitz-uva td { background-color: #4a148c !important; color: white !important; }
+        .sabor-acerola td { background-color: #ff7043 !important; color: #000 !important; }
+        .sabor-limao td { background-color: #ccff90 !important; color: #000 !important; }
+        .sabor-goiaba td { background-color: #f48fb1 !important; color: #000 !important; }
+        .sabor-caju td { background-color: #e6ee9c !important; color: #000 !important; }
+
+        .status-pendente { color: #d35400; font-weight: 800; background: white; padding: 0px 4px; border-radius: 4px; border: 1px solid #ccc; }
+        .status-reprocessado { color: #27ae60; font-weight: 800; background: white; padding: 0px 4px; border-radius: 4px; border: 1px solid #ccc; }
+        .status-descartado { color: #7f8c8d; font-weight: 800; background: white; padding: 0px 4px; border-radius: 4px; border: 1px solid #ccc; }
+        
+        .filters-bar { display: grid; grid-template-columns: repeat(9, 1fr); gap: 8px; margin-bottom: 10px; background: #eee; padding: 10px; border-radius: 8px; }
+        .info-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; font-size: 12px; color: #1a252f; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <!-- AVISO MOBILE -->
+    <div class="mobile-warning">
+        <div class="icon">⚠️</div>
+        <h1>Acesso Restrito</h1>
+        <p>Este painel foi desenvolvido exclusivamente para uso em computadores (Desktop).</p>
+    </div>
+
+    <div class="container">
+        <header class="header-app">
+            <h2>GESTÃO DE REPROCESSOS | CÂMARA FRIA NFC</h2>
+            <div class="header-buttons">
+                <button class="btn-util btn-json" onclick="exportarJSON()">Backup JSON</button>
+                <button class="btn-util btn-import" onclick="document.getElementById('fileInput').click()">Importar JSON</button>
+                <button class="btn-util btn-pdf" onclick="exportarPDF()">Exportar PDF</button>
+                <button class="btn-util btn-logs" onclick="abrirModalLogs()">Ver Logs</button>
+                <input type="file" id="fileInput" style="display:none" onchange="importarJSON(event)">
+            </div>
+        </header>
+        
+        <div class="section-title">Lançar reprocessos</div>
+        <div class="panel">
+            <div class="grid-inputs">
+                <input type="text" id="lote" placeholder="Lote" maxlength="15">
+                <select id="sku">
+                    <option value="">SKU</option>
+                    <option value="200 ML">200 ML</option><option value="300 ML">300 ML</option>
+                    <option value="900 ML">900 ML</option><option value="1.5 LT">1.5 LT</option>
+                    <option value="3 LT">3 LT</option><option value="5 LT">5 LT</option>
+                </select>
+                <select id="sabor">
+                    <option value="">Sabor</option>
+                    <option value="Laranja">Laranja</option>
+                    <option value="Laranja Pro+">Laranja Pro+</option>
+                    <option value="Fruitz Laranja">Fruitz Laranja</option>
+                    <option value="Uva">Uva</option>
+                    <option value="Fruitz Uva">Fruitz Uva</option>
+                    <option value="Acerola">Acerola</option>
+                    <option value="Limão">Limão</option>
+                    <option value="Goiaba">Goiaba</option>
+                    <option value="Caju">Caju</option>
+                </select>
+                <input type="number" id="qtd" placeholder="Qtd">
+                <select id="unidade">
+                    <option value="Rep. Linha">Rep. Linha</option>
+                    <option value="Prod. Acabado">Prod. Acabado</option>
+                </select>
+                <input type="date" id="validade" title="Data de Validade">
+                <input type="text" id="motivo" placeholder="Motivo (Opcional)">
+                <button class="btn-add" id="btnAcaoMain" onclick="adicionar()">Registrar</button>
+            </div>
+        </div>
+
+        <div class="section-title">Filtrar registros</div>
+        <div class="filters-bar">
+            <input type="text" id="fId" placeholder="ID (A000)" onkeyup="irParaPagina(1)">
+            <input type="text" id="fLote" placeholder="Lote" onkeyup="irParaPagina(1)">
+            <select id="fSku" onchange="irParaPagina(1)">
+                <option value="TODOS">SKU</option>
+                <option value="200 ML">200 ML</option><option value="300 ML">300 ML</option>
+                <option value="900 ML">900 ML</option><option value="1.5 LT">1.5 LT</option>
+                <option value="3 LT">3 LT</option><option value="5 LT">5 LT</option>
+            </select>
+            <select id="fSabor" onchange="irParaPagina(1)"><option value="TODOS">Sabor</option></select>
+            <select id="fTipo" onchange="irParaPagina(1)">
+                <option value="TODOS">Tipo</option>
+                <option value="Rep. Linha">Rep. Linha</option>
+                <option value="Prod. Acabado">Prod. Acabado</option>
+            </select>
+            <select id="fStatus" onchange="irParaPagina(1)">
+                <option value="TODOS">Status</option>
+                <option value="Pendente">Pendente</option>
+                <option value="Reprocessado">Reprocessado</option>
+                <option value="Descartado">Descartado</option>
+            </select>
+            <input type="date" id="fDataInicio" title="Data Inicial" onchange="irParaPagina(1)">
+            <input type="date" id="fDataFim" title="Data Final" onchange="irParaPagina(1)">
+            <input type="text" id="fMotivo" placeholder="Motivo" onkeyup="irParaPagina(1)">
+        </div>
+
+        <div class="info-bar">
+            <div id="exibirUsuario"></div>
+            <div id="contadorRegistros"></div>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-fixed-id">ID</th>
+                        <th>Status</th>
+                        <th>Lote</th>
+                        <th>SKU</th>
+                        <th>Sabor</th>
+                        <th>Qtd</th>
+                        <th>Tipo</th>
+                        <th>Entrada</th>
+                        <th>Saída Status</th>
+                        <th>Validade</th>
+                        <th class="col-motivo">Motivo</th>
+                        <th class="col-fixed-acoes">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaCorpo"></tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <button class="btn-page" id="btnPrev" onclick="mudarPagina(-1)">Anterior</button>
+            <span id="pageInfo" style="font-weight: bold;">Página 1 de 1</span>
+            <button class="btn-page" id="btnNext" onclick="mudarPagina(1)">Próxima</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE LOGS -->
+    <div id="modalLogs" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:99999; justify-content:center; align-items:center;">
+        <div style="background:white; width:80%; max-height:80vh; border-radius:8px; padding:20px; display:flex; flex-direction:column; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #ddd; padding-bottom:10px; margin-bottom:15px;">
+                <h3 style="margin:0; color:#2c3e50;">Histórico de Atividades (Logs)</h3>
+                <button onclick="fecharModalLogs()" style="background:#e74c3c; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; width:auto; font-size:14px;">Fechar</button>
+            </div>
+            <div style="overflow-y:auto; flex-grow:1;">
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr style="background:#2c3e50; color:white;">
+                            <th style="padding:8px; border:1px solid #ddd; font-size:12px; color:white;">Data/Hora</th>
+                            <th style="padding:8px; border:1px solid #ddd; font-size:12px; color:white;">Usuário</th>
+                            <th style="padding:8px; border:1px solid #ddd; font-size:12px; color:white;">Ação</th>
+                            <th style="padding:8px; border:1px solid #ddd; font-size:12px; color:white;">Detalhes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaLogsCorpo"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const STORAGE_KEY = 'controle-de-reprocesso-nfc-prats';
+    const LOG_STORAGE_KEY = 'logs-reprocesso-nfc';
+    
+    let reprocessos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    let logsAtividades = JSON.parse(localStorage.getItem(LOG_STORAGE_KEY)) || [];
+    let editandoId = null;
+    let paginaAtual = 1;
+    const itensPorPagina = 12;
+
+    const coresSabores = {
+        "Laranja": "sabor-laranja", "Laranja Pro+": "sabor-laranja", 
+        "Fruitz Laranja": "sabor-fruitz-laranja",
+        "Uva": "sabor-uva", "Fruitz Uva": "sabor-fruitz-uva",
+        "Acerola": "sabor-acerola", "Goiaba": "sabor-goiaba",
+        "Limão": "sabor-limao", "Caju": "sabor-caju"
+    };
+
+    const usuarioLogado = sessionStorage.getItem('usuarioLogado');
+    if (usuarioLogado) {
+        document.getElementById('exibirUsuario').innerText = `🟢 ${usuarioLogado} está conectado!`;
+    }
+
+    // Função para registrar logs
+    function registrarLog(acao, detalhes) {
+        const usuario = sessionStorage.getItem('usuarioLogado') || 'Sistema/Desconhecido';
+        const dataHoraFormatada = new Date().toLocaleString('pt-BR');
+
+        const novoLog = {
+            dataHora: dataHoraFormatada,
+            usuario: usuario,
+            acao: acao,
+            detalhes: detalhes
+        };
+
+        logsAtividades.unshift(novoLog);
+        localStorage.setItem(LOG_STORAGE_KEY, JSON.stringify(logsAtividades));
+    }
+
+    function abrirModalLogs() {
+        const corpoLogs = document.getElementById('tabelaLogsCorpo');
+        corpoLogs.innerHTML = "";
+
+        if (logsAtividades.length === 0) {
+            corpoLogs.innerHTML = `<tr><td colspan="4" style="padding:15px; text-align:center; color:#7f8c8d;">Nenhum registro de log encontrado.</td></tr>`;
+        } else {
+            logsAtividades.forEach(log => {
+                corpoLogs.innerHTML += `
+                    <tr>
+                        <td style="padding:6px; border:1px solid #ddd; font-size:11px; text-align:center;">${log.dataHora}</td>
+                        <td style="padding:6px; border:1px solid #ddd; font-size:11px; text-align:center; font-weight:bold;">${log.usuario}</td>
+                        <td style="padding:6px; border:1px solid #ddd; font-size:11px; text-align:center;">${log.acao}</td>
+                        <td style="padding:6px; border:1px solid #ddd; font-size:11px; text-align:left;">${log.detalhes}</td>
+                    </tr>
+                `;
+            });
+        }
+        document.getElementById('modalLogs').style.display = 'flex';
+    }
+
+    function fecharModalLogs() {
+        document.getElementById('modalLogs').style.display = 'none';
+    }
+
+    function gerarIdCurto() {
+        const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const letra = letras.charAt(Math.floor(Math.random() * letras.length));
+        const numeros = Math.floor(100 + Math.random() * 900);
+        return letra + numeros;
+    }
+
+    function adicionar() {
+        const dados = {
+            lote: document.getElementById('lote').value,
+            sku: document.getElementById('sku').value,
+            sabor: document.getElementById('sabor').value,
+            qtd: document.getElementById('qtd').value,
+            unidade: document.getElementById('unidade').value,
+            validade: document.getElementById('validade').value,
+            motivo: document.getElementById('motivo').value
+        };
+                
+        if(!dados.lote || !dados.sku || !dados.sabor || !dados.qtd || !dados.validade) return alert("Preencha todos os campos!");
+
+        let idFinal;
+        if (dados.unidade === "Prod. Acabado") {
+            const etiqueta = prompt("Digite o número da etiqueta:");
+            if (etiqueta === null || etiqueta.trim() === "") {
+                alert("O número da etiqueta é obrigatório para Produto Acabado!");
+                return;
+            }
+            idFinal = etiqueta.trim().toUpperCase();
+        } else {
+            idFinal = editandoId ? editandoId : gerarIdCurto();
+        }
+
+        if(editandoId) {
+            const idx = reprocessos.findIndex(i => String(i.id) === String(editandoId));
+            reprocessos[idx] = { ...reprocessos[idx], ...dados, id: idFinal };
+            registrarLog("EDIÇÃO", `Editou o registro ID: ${idFinal} (Lote: ${dados.lote}, Sabor: ${dados.sabor})`);
+            editandoId = null;
+            document.getElementById('btnAcaoMain').innerText = "Registrar";
+            document.getElementById('btnAcaoMain').style.background = "#27ae60";
+        } else {
+            reprocessos.unshift({
+                 id: idFinal,
+                 ...dados,
+                 status: "Pendente",
+                 dataEntrada: new Date().toLocaleDateString('pt-BR'),
+                 dataSaida: ""
+            });
+            registrarLog("CRIAÇÃO", `Criou o registro ID: ${idFinal} (Lote: ${dados.lote}, Sabor: ${dados.sabor}, Qtd: ${dados.qtd})`);
+        }
+        salvar();
+        limparCampos();
+    }
+
+    function editar(id) {
+        const item = reprocessos.find(i => String(i.id) === String(id));
+        if(!item) return;
+        document.getElementById('lote').value = item.lote;
+        document.getElementById('sku').value = item.sku;
+        document.getElementById('sabor').value = item.sabor;
+        document.getElementById('qtd').value = item.qtd;
+        document.getElementById('unidade').value = item.unidade;
+        document.getElementById('validade').value = item.validade;
+        document.getElementById('motivo').value = item.motivo || "";
+        editandoId = id;
+        document.getElementById('btnAcaoMain').innerText = "Salvar";
+        document.getElementById('btnAcaoMain').style.background = "#2980b9";
+    }
+
+    function alternarStatus(id) {
+        const idx = reprocessos.findIndex(i => String(i.id) === String(id));
+        const s = reprocessos[idx].status;
+        
+        if (s === "Pendente") {
+            reprocessos[idx].status = "Reprocessado";
+            reprocessos[idx].dataSaida = new Date().toLocaleDateString('pt-BR');
+        } else if (s === "Reprocessado") {
+            reprocessos[idx].status = "Descartado";
+            reprocessos[idx].dataSaida = new Date().toLocaleDateString('pt-BR');
+        } else {
+            reprocessos[idx].status = "Pendente";
+            reprocessos[idx].dataSaida = "";
+        }
+        registrarLog("MUDANÇA DE STATUS", `Alterou o status do ID ${id} para: ${reprocessos[idx].status}`);
+        salvar();
+    }
+
+    function excluir(id) {
+        if(confirm("Excluir registro?")) {
+            const itemExcluido = reprocessos.find(i => String(i.id) === String(id));
+            reprocessos = reprocessos.filter(i => String(i.id) !== String(id));
+            registrarLog("EXCLUSÃO", `Excluiu o registro ID: ${id} (Lote: ${itemExcluido ? itemExcluido.lote : 'N/A'})`);
+            salvar();
+        }
+    }
+
+    function salvar() {
+         localStorage.setItem(STORAGE_KEY, JSON.stringify(reprocessos));
+         renderizar();
+    }
+
+    function limparCampos() { ['lote','sku','sabor','qtd','validade','motivo'].forEach(id => document.getElementById(id).value = ""); }
+
+    function obterDadosFiltrados() {
+        const fId = document.getElementById('fId').value.toUpperCase();
+        const fLote = document.getElementById('fLote').value.toLowerCase();
+        const fSku = document.getElementById('fSku').value;
+        const fSabor = document.getElementById('fSabor').value;
+        const fTipo = document.getElementById('fTipo').value;
+        const fStatus = document.getElementById('fStatus').value;
+        const fMotivo = document.getElementById('fMotivo').value.toLowerCase();
+        const fDataInicio = document.getElementById('fDataInicio').value;
+        const fDataFim = document.getElementById('fDataFim').value;
+                
+        let filtrados = reprocessos.filter(i => {
+            let dentroPeriodo = true;
+            if(fDataInicio || fDataFim) {
+                const [dia, mes, ano] = i.dataEntrada.split('/');
+                const dataEntradaObj = new Date(ano, mes - 1, dia);
+                if(fDataInicio && dataEntradaObj < new Date(fDataInicio)) dentroPeriodo = false;
+                if(fDataFim && dataEntradaObj > new Date(fDataFim)) dentroPeriodo = false;
+            }
+
+            return (fId === "" || i.id.includes(fId)) &&
+                   (i.lote.toLowerCase().includes(fLote)) &&
+                   (fSku === "TODOS" || i.sku === fSku) &&
+                   (fSabor === "TODOS" || i.sabor === fSabor) &&
+                   (fTipo === "TODOS" || i.unidade === fTipo) &&
+                   (fStatus === "TODOS" || i.status === fStatus) &&
+                   (fMotivo === "" || (i.motivo && i.motivo.toLowerCase().includes(fMotivo))) &&
+                   dentroPeriodo;
+        });
+
+        return filtrados.sort((a, b) => new Date(a.validade) - new Date(b.validade));
+    }
+
+    function atualizarContador(filtradosTotal) {
+        const totalGeral = reprocessos.length;
+        const div = document.getElementById('contadorRegistros');
+        div.innerText = filtradosTotal < totalGeral ? `Exibindo ${filtradosTotal} de ${totalGeral}` : `Total: ${totalGeral}`;
+    }
+
+    function renderizar() {
+        const corpo = document.getElementById('tabelaCorpo');
+        const filtrados = obterDadosFiltrados();
+        atualizarContador(filtrados.length);
+                
+        const totalP = Math.ceil(filtrados.length / itensPorPagina) || 1;
+        if(paginaAtual > totalP) paginaAtual = totalP;
+
+        document.getElementById('pageInfo').innerText = `Página ${paginaAtual} de ${totalP}`;
+        document.getElementById('btnPrev').disabled = paginaAtual === 1;
+        document.getElementById('btnNext').disabled = paginaAtual === totalP;
+                
+        const inicio = (paginaAtual - 1) * itensPorPagina;
+        corpo.innerHTML = "";
+                
+        filtrados.slice(inicio, inicio + itensPorPagina).forEach(i => {
+            const valFmt = i.validade.split('-').reverse().join('/');
+            const classeLinha = coresSabores[i.sabor] || '';
+                    
+            corpo.innerHTML += `<tr class="${classeLinha}">
+                <td class="col-fixed-id">${i.id}</td>
+                <td><span class="status-${i.status.toLowerCase()}">${i.status}</span></td>
+                <td>${i.lote}</td>
+                <td>${i.sku}</td>
+                <td>${i.sabor}</td>
+                <td>${i.qtd}</td>
+                <td>${i.unidade}</td>
+                <td>${i.dataEntrada}</td>
+                <td>${i.dataSaida || '-'}</td>
+                <td>${valFmt}</td>
+                <td class="col-motivo">${i.motivo || ''}</td>
+                <td class="col-fixed-acoes">
+                    <button class="btn-tabela btn-acao-curto btn-editar" onclick="editar('${i.id}')" title="Editar">✎</button>
+                    <button class="btn-tabela btn-status" onclick="alternarStatus('${i.id}')">Status</button>
+                    <button class="btn-tabela btn-acao-curto btn-excluir" onclick="excluir('${i.id}')" title="Excluir">X</button>
+                </td></tr>`;
+        });
+    }
+
+    function mudarPagina(d) { paginaAtual += d; renderizar(); }
+    function irParaPagina(p) { paginaAtual = p; renderizar(); }
+
+    function exportarJSON() {
+        const filtrados = obterDadosFiltrados();
+        const s = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(filtrados));
+        const a = document.createElement('a'); a.href = s; a.download = "backup_reprocesso.json"; a.click();
+    }
+
+    function importarJSON(event) {
+        const reader = new FileReader();
+        reader.onload = (e) => { 
+            try { 
+                reprocessos = JSON.parse(e.target.result); 
+                registrarLog("IMPORTAÇÃO", "Importou dados via arquivo JSON externo.");
+                salvar(); 
+            } catch(err){ 
+                alert("Erro ao importar!"); 
+            } 
+        };
+        reader.readAsText(event.target.files[0]);
+    }
+
+    function exportarPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('l', 'pt', 'a4'); 
+        const agora = new Date();
+        
+        const dadosParaPdf = [...obterDadosFiltrados()].sort((a, b) => {
+            if (a.sabor < b.sabor) return -1;
+            if (a.sabor > b.sabor) return 1;
+            return new Date(a.validade) - new Date(b.validade);
+        });
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(14);
+        doc.text("Relatório de Reprocessos - Câmara Fria", 40, 40);
+                
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.text(`Gerado em: ${agora.toLocaleString('pt-BR')} | Total: ${dadosParaPdf.length}`, 40, 55);
+
+        const colunas = ["ID", "Status", "Lote", "SKU", "Sabor", "Qtd", "Tipo", "Entrada", "Saída", "Validade", "Motivo"];
+        const linhas = dadosParaPdf.map(i => [
+            i.id, i.status, i.lote, i.sku, i.sabor, i.qtd, i.unidade, i.dataEntrada, i.dataSaida || '-', i.validade.split('-').reverse().join('/'), i.motivo || ''
+        ]);
+
+        doc.autoTable({
+            head: [colunas],
+            body: linhas,
+            startY: 70,
+            theme: 'grid',
+            headStyles: { fillColor: [0, 0, 0], fontSize: 8, fontStyle: 'bold', textColor: [255, 255, 255] },
+            styles: { fontSize: 7, cellPadding: 2, overflow: 'linebreak' },
+            columnStyles: {
+                10: { cellWidth: 100 } 
+            }
+        });
+
+        doc.save(`relatorio_${agora.getTime()}.pdf`);
+    }
+
+    const sel = document.getElementById('fSabor');
+    Object.keys(coresSabores).forEach(s => {
+        const o = document.createElement('option'); o.value = s; o.innerText = s;
+        sel.appendChild(o);
+    });
+
+    renderizar();
+</script>
+</body>
+</html>
