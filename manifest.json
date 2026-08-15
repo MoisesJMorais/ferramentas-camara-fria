@@ -1,0 +1,30 @@
+{
+  "name": "Ferramentas Câmara Fria",
+  "short_name": "Ferramentas Câmara Fria",
+  "start_url": "/ferramentas-camara-fria/index.html",
+  "display": "fullscreen",
+  "background_color": "#ffffff",
+  "theme_color": "#004A97",
+  "icons": [
+    {
+  "name": "Ferramentas Câmara Fria",
+  "short_name": "FerramentasCF",
+  "start_url": "/ferramentas-camara-fria/index.html",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
