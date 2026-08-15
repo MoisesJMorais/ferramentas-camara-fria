@@ -1,7 +1,7 @@
 {
   "name": "Ferramentas Câmara Fria",
   "short_name": "Ferramentas Câmara Fria",
-  "description": "Ferramentas essenciais para rotina de trabalho na câmara fria da Suco Prat's"
+  "description": "Ferramentas essenciais para rotina de trabalho na câmara fria da Suco Prat's",
   "start_url": "/ferramentas-camara-fria/index.html",
   "display": "fullscreen",
   "background_color": "#1A1A1A",
