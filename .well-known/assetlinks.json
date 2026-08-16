@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "io.github.moisesjmorais.ferramentascf",
-        "sha256_cert_fingerprints": ["DC:A0:E8:F2:E2:CE:1A:92:92:6F:94:17:4A:89:36:99:86:BE:87:5D:29:56:DD:82:67:E6:79:92:84:3C:33:3F"]
-      }
-    }]
