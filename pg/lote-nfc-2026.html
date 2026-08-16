@@ -1,0 +1,201 @@
+---
+---
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% include default-config.html %}
+    <link rel="icon" type="image/x-icon" href="https://moisesjmorais.github.io/prats/camara-fria/favicons/lote-nfc-2026.ico">
+    
+    <title>Lote do Dia</title>
+
+    <style>
+        :root {
+            --primary-cyan: ##004A97;
+            --dark-bg: #1a1a1a;
+            --card-bg: #121212;
+            --accent-bg: #222;
+            --text-main: #ffffff;
+            --text-secondary: #888;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; 
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px; 
+            display: flex;
+            flex-direction: column;
+            max-height: 98vh; 
+        }
+
+        .main-display {
+            background-color: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 10px;
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.05);
+        }
+
+        #current-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: block;
+        }
+
+        #current-time {
+            color: var(--text-main);
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 2px 0;
+            font-variant-numeric: tabular-nums;
+            display: block;
+        }
+
+        .lote-badge {
+            display: inline-block;
+            background: rgba(0, 229, 255, 0.1);
+            border: 2px solid var(--primary-cyan);
+            padding: 5px 20px;
+            border-radius: 50px;
+            margin-top: 5px;
+        }
+
+        .lote-badge .label {
+            color: var(--primary-cyan);
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .lote-badge #lote-base {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--primary-cyan);
+        }
+
+        .production-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 6px;
+        }
+
+        .line-card {
+            background: var(--card-bg);
+            padding: 10px 15px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid #333;
+        }
+
+        .line-card:hover {
+            border-left-color: var(--primary-cyan);
+            background: var(--accent-bg);
+        }
+
+        .line-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .line-code {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-cyan);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        #current-time { animation: pulse 2s infinite ease-in-out; }
+    </style>
+</head>
+    {% include title-fixed.html %}
+<body>
+
+    <div class="container">
+        <div class="main-display">
+            <span id="current-date">-- DE -- DE ----</span>
+            <span id="current-time">00:00</span>
+            
+            <div class="lote-badge">
+                <span class="label">LOTE DO DIA:</span>
+                <span id="lote-base">----</span>
+            </div>
+        </div>
+
+        <div id="production-lines" class="production-grid"></div>
+    </div>
+    
+    <script src="https://moisesjmorais.github.io/security.js"></script>
+    <script>
+        const linhas = [
+            { nome: "200 ML  ►  COMPACT FLEX", letra: "C" },
+            { nome: "3LT ou 5LT  ►  ZEGLA 1", letra: "Z" },
+            { nome: "3LT ou 5LT  ►  ZEGLA 2", letra: "G" },
+            { nome: "1.5 LT  ►  MESAL 60", letra: "M" },
+            { nome: "900 ML  ►  SIDEL", letra: "H" },
+            { nome: "1.5 LT  ►  KHS 1", letra: "K" },
+            { nome: "300 ML  ►  KHS 2", letra: "T" }
+        ];
+
+        function atualizar() {
+            const agora = new Date();
+            const opcoesData = { day: '2-digit', month: 'long', year: 'numeric' };
+            document.getElementById('current-date').innerText = agora.toLocaleDateString('pt-BR', opcoesData);
+
+            const hora = agora.getHours().toString().padStart(2, '0');
+            const min = agora.getMinutes().toString().padStart(2, '0');
+            document.getElementById('current-time').innerText = `${hora}:${min}`;
+
+            const dataBase = new Date('2026-01-01T00:00:00');
+            const diffDias = Math.floor((agora - dataBase) / (1000 * 60 * 60 * 24));
+            const loteAtual = 6001 + diffDias;
+
+            document.getElementById('lote-base').innerText = loteAtual;
+
+            const grid = document.getElementById('production-lines');
+            grid.innerHTML = '';
+            
+            linhas.forEach(l => {
+                const div = document.createElement('div');
+                div.className = 'line-card';
+                div.innerHTML = `
+                    <span class="line-name">${l.nome}</span>
+                    <span class="line-code">${l.letra}${loteAtual}</span>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        setInterval(atualizar, 30000);
+        atualizar();
+    </script>
+</body>
+    {% include signature.html %}
+</html>
