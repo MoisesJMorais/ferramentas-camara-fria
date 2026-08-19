@@ -555,7 +555,7 @@
                 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(10);
-        doc.text(`Gerado em: ${agora.toLocaleString('pt-BR')} pelo sistema <strong>Gestão de Reprocessos</strong> | Total: ${dadosParaPdf.length} | Desenvolvido por <strong>Moisés J. M. Lima</strong>`, 40, 55);
+        doc.text(`Gestão de Reprocesos - Desenvolvido por Moisés J. M. Lima | Relatório gerado em: ${agora.toLocaleString('pt-BR')} | Total: ${dadosParaPdf.length}`, 40, 55);
 
         const colunas = ["ID", "Status", "Lote", "SKU", "Sabor", "Qtd", "Tipo", "Entrada", "Saída", "Validade", "Motivo"];
         const linhas = dadosParaPdf.map(i => [
