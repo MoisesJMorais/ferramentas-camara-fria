@@ -3,25 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assistente Câmara Fria</title>
+    <title>Câmara Fria - Assistente IA</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="chat-container">
-        <header class="chat-header">
-            <h2>Assistente Câmara Fria</h2>
-            <span class="status">Online</span>
-        </header>
-        <div id="chat-messages" class="chat-messages"></div>
-        <div class="chat-input-area">
-            <div class="input-wrapper">
-                <input type="text" id="user-input" placeholder="Mensaje para o assistente..." autocomplete="off">
-                <button id="send-btn" title="Enviar">
-                    <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
-                </button>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <button class="new-chat-btn" onclick="limparChat()">
+                <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="16" width="16"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Nova Conversa
+            </button>
+            <div class="sidebar-history">
+                <span class="history-title">Histórico recente</span>
+                <div class="history-item active">Procedimentos Câmara Fria</div>
             </div>
-            <div class="footer-note">Assistente para normas e procedimentos da Câmara Fria.</div>
-        </div>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">CF</div>
+                    <span>Operador Logístico</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <span class="model-badge">GPT-4o (Câmara Fria)</span>
+                <div class="status-indicator">
+                    <span class="dot"></span> Online
+                </div>
+            </header>
+
+            <div id="chat-container" class="chat-viewport">
+                <div class="welcome-screen" id="welcome-screen">
+                    <h1>O que deseja consultar hoje?</h1>
+                    <div class="suggestion-grid">
+                        <div class="suggestion-card" onclick="enviarSugestao('Qual a temperatura ideal?')">
+                            <h3>Temperatura Ideal</h3>
+                            <p>Consulte as faixas para resfriados e congelados.</p>
+                        </div>
+                        <div class="suggestion-card" onclick="enviarSugestao('Quais EPIs usar?')">
+                            <h3>EPIs Obrigatórios</h3>
+                            <p>Equipamentos de segurança para baixa temperatura.</p>
+                        </div>
+                        <div class="suggestion-card" onclick="enviarSugestao('O que fazer em caso de emergência?')">
+                            <h3>Procedimento de Emergência</h3>
+                            <p>Passo a passo se ficar preso na câmara.</p>
+                        </div>
+                        <div class="suggestion-card" onclick="enviarSugestao('Como funciona a limpeza?')">
+                            <h3>Higienização e Degelo</h3>
+                            <p>Rotinas preventivas e manutenção.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="messages-list" class="messages-list"></div>
+            </div>
+
+            <div class="input-container">
+                <div class="input-box">
+                    <textarea id="user-input" rows="1" placeholder="Pergunte sobre normas, temperaturas ou EPIs..."></textarea>
+                    <button id="send-btn" onclick="processarEnvio()">
+                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="16" width="16"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                    </button>
+                </div>
+                <div class="disclaimer">Assistente interno de normas operacionais. Verifique sempre os manuais físicos.</div>
+            </div>
+        </main>
     </div>
     <script src="script.js"></script>
 </body>
