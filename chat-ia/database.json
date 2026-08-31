@@ -1,0 +1,18 @@
+[
+  {
+    "palavrasChave": ["temperatura", "graus", "termostato", "frio"],
+    "resposta": "A temperatura ideal da câmara fria deve ser mantida entre -18°C e -20°C para congelados, e entre 2°C e 4°C para resfriados."
+  },
+  {
+    "palavrasChave": ["epi", "roupa", "vestimenta", "proteção", "luva", "touca"],
+    "resposta": "O uso de EPIs é obrigatório: jaqueta térmica, calça térmica, botas de borracha/PVC, touca balaclava e luvas apropriadas para baixa temperatura."
+  },
+  {
+    "palavrasChave": ["emergência", "preso", "trava", "porta", "trancada"],
+    "resposta": "Se ficar preso, utilize o botão de liberação de emergência localizado na parte interna da porta (botão vermelho luminoso) ou a alavanca de abertura manual."
+  },
+  {
+    "palavrasChave": ["limpeza", "higienização", "gelo", "descongelar"],
+    "resposta": "O degelo e a limpeza preventiva devem ser agendados conforme o manual de operação quinzenal, evitando acúmulo excessivo de gelo nas serpentinas."
+  }
+]
