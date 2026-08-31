@@ -4,62 +4,100 @@ async function carregarBaseDados() {
     try {
         const resposta = await fetch('database.json');
         baseConhecimento = await resposta.json();
-        adicionarMensagem("Olá! Como posso ajudar você com os procedimentos da câmara fria hoje?", 'bot');
     } catch (erro) {
-        adicionarMensagem("Erro ao carregar os dados de procedimentos do sistema.", 'bot');
-        console.error(erro);
+        console.error("Erro ao carregar banco de dados:", erro);
+    }
+}
+
+function alternarTela(temMensagens) {
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const messagesList = document.getElementById('messages-list');
+    
+    if (temMensagens) {
+        welcomeScreen.style.display = 'none';
+        messagesList.style.display = 'flex';
+    } else {
+        welcomeScreen.style.display = 'block';
+        messagesList.style.display = 'none';
+        messagesList.innerHTML = '';
     }
 }
 
 function adicionarMensagem(texto, remetente) {
-    const chatMessages = document.getElementById('chat-messages');
-    const mensagemDiv = document.createElement('div');
-    mensagemDiv.classList.add('message', remetente);
+    alternarTela(true);
+    const messagesList = document.getElementById('messages-list');
+    
+    const rowDiv = document.createElement('div');
+    rowDiv.classList.add('message-row', remetente);
+    
+    const bubbleDiv = document.createElement('div');
+    bubbleDiv.classList.add('message-bubble');
     
     if (remetente === 'bot') {
-        mensagemDiv.innerHTML = `<div style="font-weight: 600; margin-bottom: 4px; color: #10a37f; font-size: 0.85rem;">Assistente</div><div>${texto}</div>`;
+        bubbleDiv.innerHTML = `<div style="font-weight: 600; margin-bottom: 4px; color: #10a37f; font-size: 0.8rem;">Assistente Câmara Fria</div><div>${texto}</div>`;
     } else {
-        mensagemDiv.textContent = texto;
+        bubbleDiv.textContent = texto;
     }
-
-    chatMessages.appendChild(mensagemDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    rowDiv.appendChild(bubbleDiv);
+    messagesList.appendChild(rowDiv);
+    
+    const container = document.getElementById('chat-container');
+    container.scrollTop = container.scrollHeight;
 }
 
-function processarMensagem(entradaUsuario) {
-    const textoLimpo = entradaUsuario.toLowerCase().trim();
-    let respostaEncontrada = "Desculpe, não encontrei informações sobre isso. Tente perguntar sobre 'temperatura', 'epi' ou 'emergência'.";
+function processarResposta(textoUsuario) {
+    const textoLimpo = textoUsuario.toLowerCase().trim();
+    let resposta = "Não encontrei informações específicas sobre isso no banco de dados. Tente perguntar sobre temperatura, EPIs ou emergências.";
 
     for (let item of baseConhecimento) {
-        for (let palavraChave of item.palavrasChave) {
-            if (textoLimpo.includes(palavraChave)) {
-                respostaEncontrada = item.resposta;
+        for (let palavra of item.palavrasChave) {
+            if (textoLimpo.includes(palavra)) {
+                resposta = item.resposta;
                 break;
             }
         }
-        if (respostaEncontrada !== "Desculpe, não encontrei informações sobre isso. Tente perguntar sobre 'temperatura', 'epi' ou 'emergência'.") {
+        if (resposta !== "Não encontrei informações específicas sobre isso no banco de dados. Tente perguntar sobre temperatura, EPIs ou emergências.") {
             break;
         }
     }
 
     setTimeout(() => {
-        adicionarMensagem(respostaEncontrada, 'bot');
+        adicionarMensagem(resposta, 'bot');
     }, 400);
 }
 
-document.getElementById('send-btn').addEventListener('click', () => {
-    const input = document.getElementById('user-input');
-    const texto = input.value;
-    if (texto.trim() === "") return;
+function processarEnvio() {
+    const textarea = document.getElementById('user-input');
+    const texto = textarea.value.trim();
+    if (!texto) return;
 
+    textarea.value = '';
+    textarea.style.height = 'auto';
+    
     adicionarMensagem(texto, 'user');
-    processarMensagem(texto);
-    input.value = "";
+    processarResposta(texto);
+}
+
+function enviarSugestao(texto) {
+    adicionarMensagem(texto, 'user');
+    processarResposta(texto);
+}
+
+function limparChat() {
+    alternarTela(false);
+}
+
+const textarea = document.getElementById('user-input');
+textarea.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
 });
 
-document.getElementById('user-input').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        document.getElementById('send-btn').click();
+textarea.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        processarEnvio();
     }
 });
 
