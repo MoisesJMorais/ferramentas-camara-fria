@@ -9,13 +9,18 @@
 <body>
     <div class="chat-container">
         <header class="chat-header">
-            <h2>Assistente - Câmara Fria</h2>
+            <h2>Assistente Câmara Fria</h2>
             <span class="status">Online</span>
         </header>
         <div id="chat-messages" class="chat-messages"></div>
         <div class="chat-input-area">
-            <input type="text" id="user-input" placeholder="Digite sua dúvida (ex: temperatura, EPI)..." autocomplete="off">
-            <button id="send-btn">Enviar</button>
+            <div class="input-wrapper">
+                <input type="text" id="user-input" placeholder="Mensaje para o assistente..." autocomplete="off">
+                <button id="send-btn" title="Enviar">
+                    <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                </button>
+            </div>
+            <div class="footer-note">Assistente para normas e procedimentos da Câmara Fria.</div>
         </div>
     </div>
     <script src="script.js"></script>
