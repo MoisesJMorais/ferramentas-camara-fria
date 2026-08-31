@@ -12,12 +12,13 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
 }
 
 .chat-container {
     width: 100%;
-    max-width: 700px;
-    height: 100vh;
+    height: 100%;
     background-color: #212121;
     display: flex;
     flex-direction: column;
@@ -26,43 +27,46 @@ body {
 
 .chat-header {
     background-color: #212121;
-    padding: 16px 20px;
+    padding: 12px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 10;
 }
 
 .chat-header h2 {
-    font-size: 1rem;
-    font-weight: 650;
+    font-size: 0.95rem;
+    font-weight: 500;
     color: #ececec;
 }
 
 .status {
     font-size: 0.75rem;
     color: #10a37f;
-    background-color: rgba(16, 163, 127, 0.15);
-    padding: 4px 8px;
-    border-radius: 12px;
+    background-color: rgba(16, 163, 127, 0.12);
+    padding: 3px 8px;
+    border-radius: 10px;
 }
 
 .chat-messages {
     flex: 1;
-    padding: 20px;
+    padding: 20px 10px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    max-width: 800px;
+    gap: 20px;
     width: 100%;
+    max-width: 768px;
     margin: 0 auto;
 }
 
 .message {
     display: flex;
-    gap: 16px;
-    max-width: 100%;
+    gap: 14px;
+    width: 100%;
+    max-width: 740px;
+    margin: 0 auto;
     padding: 0 10px;
     font-size: 0.95rem;
     line-height: 1.6;
@@ -70,26 +74,27 @@ body {
 
 .message.bot {
     background-color: transparent;
-    align-self: stretch;
-    border-left: none;
     color: #ececec;
 }
 
 .message.user {
     background-color: #2f2f2f;
-    align-self: stretch;
-    border-radius: 12px;
-    padding: 12px 16px;
+    border-radius: 14px;
+    padding: 10px 14px;
     color: #ececec;
     margin-left: auto;
-    max-width: 85%;
+    margin-right: auto;
+    max-width: fit-content;
+    align-self: flex-end;
 }
 
 .chat-input-area {
-    padding: 20px;
-    background: linear-gradient(180deg, rgba(33,33,33,0) 0%, rgba(33,33,33,1) 50%);
+    padding: 10px 16px 20px 16px;
+    background: linear-gradient(180deg, rgba(33,33,33,0) 0%, rgba(33,33,33,0.9) 30%, rgba(33,33,33,1) 100%);
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 }
 
 .input-wrapper {
@@ -97,42 +102,66 @@ body {
     align-items: center;
     background-color: #2f2f2f;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    padding: 8px 12px;
+    border-radius: 14px;
+    padding: 6px 8px 6px 14px;
     width: 100%;
-    max-width: 700px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    max-width: 740px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.15);
+    transition: border-color 0.2s;
+}
+
+.input-wrapper:focus-within {
+    border-color: rgba(255, 255, 255, 0.35);
 }
 
 .chat-input-area input {
     flex: 1;
     background-color: transparent;
     border: none;
-    padding: 8px;
+    padding: 6px 0;
     color: #ececec;
     outline: none;
     font-size: 0.95rem;
 }
 
 .chat-input-area input::placeholder {
-    color: #8e8e8e;
+    color: #757575;
 }
 
 .chat-input-area button {
-    background-color: #10a37f;
-    color: #fff;
+    background-color: #ececec;
+    color: #212121;
     border: none;
-    border-radius: 10px;
-    width: 32px;
-    height: 32px;
+    border-radius: 8px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: background 0.2s;
-    font-weight: bold;
+    flex-shrink: 0;
 }
 
 .chat-input-area button:hover {
-    background-color: #0d8a6b;
+    background-color: #ffffff;
+}
+
+.footer-note {
+    font-size: 0.75rem;
+    color: #757575;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .chat-messages {
+        padding: 10px 5px;
+        gap: 16px;
+    }
+    .message {
+        font-size: 0.9rem;
+    }
+    .chat-input-area {
+        padding: 10px 10px 14px 10px;
+    }
 }
