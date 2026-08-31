@@ -4,9 +4,9 @@ async function carregarBaseDados() {
     try {
         const resposta = await fetch('database.json');
         baseConhecimento = await resposta.json();
-        adicionarMensagem("Olá! Sou o assistente da Câmara Fria. Como posso ajudar com os procedimentos hoje?", 'bot');
+        adicionarMensagem("Olá! Como posso ajudar você com os procedimentos da câmara fria hoje?", 'bot');
     } catch (erro) {
-        adicionarMensagem("Erro ao carregar os dados do sistema.", 'bot');
+        adicionarMensagem("Erro ao carregar os dados de procedimentos do sistema.", 'bot');
         console.error(erro);
     }
 }
@@ -15,14 +15,20 @@ function adicionarMensagem(texto, remetente) {
     const chatMessages = document.getElementById('chat-messages');
     const mensagemDiv = document.createElement('div');
     mensagemDiv.classList.add('message', remetente);
-    mensagemDiv.textContent = texto;
+    
+    if (remetente === 'bot') {
+        mensagemDiv.innerHTML = `<div style="font-weight: 600; margin-bottom: 4px; color: #10a37f; font-size: 0.85rem;">Assistente</div><div>${texto}</div>`;
+    } else {
+        mensagemDiv.textContent = texto;
+    }
+
     chatMessages.appendChild(mensagemDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 function processarMensagem(entradaUsuario) {
     const textoLimpo = entradaUsuario.toLowerCase().trim();
-    let respostaEncontrada = "Desculpe, não entendi. Tente perguntar sobre 'temperatura', 'epi' ou 'emergência'.";
+    let respostaEncontrada = "Desculpe, não encontrei informações sobre isso. Tente perguntar sobre 'temperatura', 'epi' ou 'emergência'.";
 
     for (let item of baseConhecimento) {
         for (let palavraChave of item.palavrasChave) {
@@ -31,14 +37,14 @@ function processarMensagem(entradaUsuario) {
                 break;
             }
         }
-        if (respostaEncontrada !== "Desculpe, não entendi. Tente perguntar sobre 'temperatura', 'epi' ou 'emergência'.") {
+        if (respostaEncontrada !== "Desculpe, não encontrei informações sobre isso. Tente perguntar sobre 'temperatura', 'epi' ou 'emergência'.") {
             break;
         }
     }
 
     setTimeout(() => {
         adicionarMensagem(respostaEncontrada, 'bot');
-    }, 500);
+    }, 400);
 }
 
 document.getElementById('send-btn').addEventListener('click', () => {
