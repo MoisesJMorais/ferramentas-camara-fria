@@ -8,8 +8,7 @@
     "resposta": "O uso de EPI's é obrigatório: jaqueta e calça térmica ou macacão térmico, botinas com bico de ferro, touca balaclava e luvas apropriadas para baixa temperatura."
   },
   {
-    "palavrasChave": ["códigos de produto", "laranja integral"],
-    "resposta": "200 ML - 1010.200.000101
-    300 ML - 1010.200.000045"
+    "palavrasChave": ["código laranja 200 ml"],
+    "resposta": "1010.200.000101"
   },
 ]
