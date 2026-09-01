@@ -2,7 +2,7 @@ let baseConhecimento = [];
 
 async function carregarBaseDados() {
     try {
-        const resposta = await fetch('database.json');
+        const resposta = await fetch('database.json', 'teste.json');
         baseConhecimento = await resposta.json();
     } catch (erro) {
         console.error("Erro ao carregar banco de dados:", erro);
