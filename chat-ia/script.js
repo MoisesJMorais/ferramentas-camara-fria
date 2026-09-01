@@ -48,18 +48,24 @@ function adicionarMensagem(texto, remetente) {
 
 function processarResposta(textoUsuario) {
     const textoLimpo = textoUsuario.toLowerCase().trim();
-    let resposta = "Não encontrei informações específicas sobre isso no banco de dados.";
+
+    let respostasEncontradas = [];
 
     for (let item of baseConhecimento) {
         for (let palavra of item.palavrasChave) {
-            if (textoLimpo.includes(palavra)) {
-                resposta = item.resposta;
+            if (textoLimpo.includes(palavra.toLowerCase())) {
+                respostasEncontradas.push(item.resposta);
                 break;
             }
         }
-        if (resposta !== "Não encontrei informações específicas sobre isso no banco de dados.") {
-            break;
-        }
+    }
+
+    let resposta;
+
+    if (respostasEncontradas.length > 0) {
+        resposta = respostasEncontradas.join("<br><br>");
+    } else {
+        resposta = "Não encontrei informações específicas sobre isso no banco de dados.";
     }
 
     setTimeout(() => {
