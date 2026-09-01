@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistente Câmara Fria</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .chat-container { width: 100%; max-width: 600px; background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 80vh; overflow: hidden; }
+        .chat-header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-weight: bold; }
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 10px 14px; border-radius: 6px; max-width: 80%; line-height: 1.4; }
+        .user { background: #e3f2fd; align-self: flex-end; color: #0d47a1; }
+        .bot { background: #f1f3f4; align-self: flex-start; color: #202124; }
+        .chat-input { display: flex; border-top: 1px solid #ddd; padding: 10px; background: #fff; }
+        .chat-input input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; outline: none; }
+        .chat-input button { background: #1a73e8; color: white; border: none; padding: 10px 15px; margin-left: 8px; border-radius: 4px; cursor: pointer; }
+        .chat-input button:hover { background: #1557b0; }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">Assistente de Dúvidas de Trabalho</div>
+    <div id="messages" class="chat-messages">
+        <div class="message bot">Olá! Como posso te ajudar hoje com base nos nossos processos?</div>
+    </div>
+    <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Digite sua dúvida..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()">Enviar</button>
+    </div>
+</div>
+
+<script>
+    // SUA CHAVE DA API DO GOOGLE AI STUDIO (Cole entre as aspas)
+    const apiKey = "SUA_CHAVE_DE_API_AQUI"; 
+
+    // COLE AQUI O CONTEÚDO DO SEU JSON OU INSTRUÇÕES DO SISTEMA
+    const systemInstruction = "Você é um assistente de suporte de trabalho. Responda às dúvidas de forma clara e direta.";
+
+    async function sendMessage() {
+        const inputField = document.getElementById("userInput");
+        const messageText = inputField.value.trim();
+        if (!messageText) return;
+
+        const messagesContainer = document.getElementById("messages");
+        
+        // Exibe mensagem do usuário
+        messagesContainer.innerHTML += `<div class="message user">${messageText}</div>`;
+        inputField.value = "";
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Exibe mensagem temporária de "carregando"
+        const loadingId = "loading-" + Date.now();
+        messagesContainer.innerHTML += `<div id="${loadingId}" class="message bot">Pensando...</div>`;
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        try {
+            // Chamada direta para a API do Gemini (Modelo Flash)
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [
+                        { role: "user", parts: [{ text: `${systemInstruction}\n\nPergunta do usuário: ${messageText}` }] }
+                    ]
+                })
+            });
+
+            const data = await response.json();
+            const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Desculpe, ocorreu um erro ao processar sua resposta.";
+
+            // Remove o "Pensando..." e coloca a resposta real
+            document.getElementById(loadingId).remove();
+            messagesContainer.innerHTML += `<div class="message bot">${botReply.replace(/\n/g, '<br>')}</div>`;
+        } catch (error) {
+            document.getElementById(loadingId).remove();
+            messagesContainer.innerHTML += `<div class="message bot">Erro de conexão com o servidor.</div>`;
+        }
+
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    }
+</script>
+
+</body>
+</html>
