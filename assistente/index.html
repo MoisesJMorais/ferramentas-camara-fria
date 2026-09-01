@@ -3,40 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assistente Câmara Fria</title>
+    <title>Assistente IA - Trabalho</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .chat-container { width: 100%; max-width: 600px; background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 80vh; overflow: hidden; }
-        .chat-header { background: #1a73e8; color: white; padding: 15px; text-align: center; font-weight: bold; }
-        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .message { padding: 10px 14px; border-radius: 6px; max-width: 80%; line-height: 1.4; }
-        .user { background: #e3f2fd; align-self: flex-end; color: #0d47a1; }
-        .bot { background: #f1f3f4; align-self: flex-start; color: #202124; }
-        .chat-input { display: flex; border-top: 1px solid #ddd; padding: 10px; background: #fff; }
-        .chat-input input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; outline: none; }
-        .chat-input button { background: #1a73e8; color: white; border: none; padding: 10px 15px; margin-left: 8px; border-radius: 4px; cursor: pointer; }
-        .chat-input button:hover { background: #1557b0; }
+        :root {
+            --bg-main: #ffffff;
+            --bg-sidebar: #f9f9f9;
+            --text-main: #2b2b2b;
+            --text-muted: #8e8e8e;
+            --border-color: #e5e5e5;
+            --bot-bubble: #f4f4f4;
+            --user-bubble: #10a37f;
+            --primary-color: #10a37f;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg-main); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
+
+        /* Sidebar estilo GPT */
+        .sidebar { width: 260px; background: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 15px; justify-content: space-between; }
+        .sidebar-top h2 { font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px; }
+        .sidebar-top p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
+        .status-badge { font-size: 0.75rem; background: #e1f5fe; color: #0288d1; padding: 6px 10px; border-radius: 6px; margin-top: 15px; font-weight: 500; }
+
+        /* Área principal do Chat */
+        .chat-area { flex: 1; display: flex; flex-direction: column; height: 100vh; background: var(--bg-main); position: relative; }
+        
+        .chat-header { padding: 15px 20px; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .chat-header span::before { content: ""; display: inline-block; width: 8px; height: 8px; background: var(--primary-color); border-radius: 50%; margin-right: 6px; }
+
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 24px; align-items: center; }
+        
+        .message-wrapper { width: 100%; max-width: 750px; display: flex; gap: 16px; font-size: 0.95rem; line-height: 1.6; }
+        .message-wrapper.user { justify-content: flex-end; }
+        
+        .avatar { width: 32px; height: 32px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem; flex-shrink: 0; }
+        .bot .avatar { background: var(--primary-color); color: white; }
+        .user .avatar { background: #5436da; color: white; order: 2; }
+
+        .message-content { background: var(--bot-bubble); padding: 2px 0; color: var(--text-main); flex: 1; max-width: calc(100% - 48px); word-break: break-word; }
+        .user .message-content { background: transparent; text-align: right; order: 1; }
+
+        /* Caixa de input inferior */
+        .chat-input-container { padding: 20px; display: flex; justify-content: center; background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%); }
+        .input-box { width: 100%; max-width: 750px; border: 1px solid var(--border-color); border-radius: 12px; background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.05); display: flex; align-items: center; padding: 8px 12px; transition: border-color 0.2s; }
+        .input-box:focus-within { border-color: var(--primary-color); }
+        
+        .input-box input { flex: 1; border: none; outline: none; padding: 10px; font-size: 0.95rem; background: transparent; }
+        .input-box button { background: var(--text-muted); color: white; border: none; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+        .input-box button.active { background: var(--primary-color); }
+        .input-box button:disabled { cursor: not-allowed; opacity: 0.6; }
+
+        /* Responsivo para celulares */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+        }
     </style>
 </head>
 <body>
 
-<div class="chat-container">
-    <div class="chat-header">Assistente de Dúvidas de Trabalho</div>
-    <div id="messages" class="chat-messages">
-        <div class="message bot">Olá! Como posso te ajudar hoje com base nos nossos processos?</div>
+    <!-- Sidebar Lateral -->
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <h2>🤖 Work Assistant</h2>
+            <p>Assistente inteligente integrado às bases de dados internas da empresa.</p>
+            <div id="status-badge" class="status-badge">Carregando bases...</div>
+        </div>
+        <div style="font-size: 0.75rem; color: var(--text-muted);">
+            Versão 1.0 • 100% Privado
+        </div>
     </div>
-    <div class="chat-input">
-        <input type="text" id="userInput" placeholder="Digite sua dúvida..." onkeypress="handleKeyPress(event)">
-        <button onclick="sendMessage()">Enviar</button>
+
+    <!-- Área Principal -->
+    <div class="chat-area">
+        <div class="chat-header">
+            <span>Assistente Interno</span>
+        </div>
+
+        <div id="messages" class="chat-messages">
+            <div class="message-wrapper bot">
+                <div class="avatar">AI</div>
+                <div class="message-content">Carregando os arquivos de configuração... Aguarde um instante.</div>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <div class="input-box">
+                <input type="text" id="userInput" placeholder="Carregando bases de dados..." disabled onkeypress="handleKeyPress(event)" oninput="toggleButton()">
+                <button id="sendBtn" onclick="sendMessage()" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                </button>
+            </div>
+        </div>
     </div>
-</div>
 
 <script>
-    // SUA CHAVE DA API DO GOOGLE AI STUDIO (Cole entre as aspas)
-    const apiKey = "SUA_CHAVE_DE_API_AQUI"; 
+    // 1. SUA CHAVE DA API DO GOOGLE AI STUDIO
+    const apiKey = "AQ.Ab8RN6K2pIsLusWGeEcWWh2dMH5lD34TkM9mCS3ExnwoeTOqwg"; 
 
-    // COLE AQUI O CONTEÚDO DO SEU JSON OU INSTRUÇÕES DO SISTEMA
-    const systemInstruction = "Você é um assistente de suporte de trabalho. Responda às dúvidas de forma clara e direta.";
+    // 2. LISTE AQUI OS SEUS ARQUIVOS JSON
+    const arquivosJson = [
+        'armazem.json',
+        'folgas.json',
+        'teste.json'
+    ];
+
+    let baseDadosUnificada = "";
+
+    async function carregarTodasBases() {
+        try {
+            const promessas = arquivosJson.map(async (arquivo) => {
+                const resposta = await fetch(arquivo);
+                if (!resposta.ok) throw new Error(`Falha ao carregar ${arquivo}`);
+                const dados = await resposta.json();
+                return `--- FONTE: ${arquivo} ---\n` + JSON.stringify(dados, null, 2);
+            });
+
+            const resultados = await Promise.all(promessas);
+            baseDadosUnificada = resultados.join("\n\n");
+
+            document.getElementById("status-badge").innerText = `● Conectado (${arquivosJson.length} arquivos)`;
+            document.getElementById("messages").innerHTML = `
+                <div class="message-wrapper bot">
+                    <div class="avatar">AI</div>
+                    <div class="message-content">Olá! Bases de dados carregadas com sucesso. Como posso te ajudar com as diretrizes de trabalho hoje?</div>
+                </div>
+            `;
+            
+            const input = document.getElementById("userInput");
+            input.disabled = false;
+            input.placeholder = "Envie uma mensagem para o assistente...";
+        } catch (erro) {
+            console.error(erro);
+            document.getElementById("status-badge").innerText = "❌ Erro ao carregar";
+            document.getElementById("messages").innerHTML = `
+                <div class="message-wrapper bot">
+                    <div class="avatar">AI</div>
+                    <div class="message-content">Erro ao carregar os arquivos JSON. Verifique se eles estão na mesma pasta do GitHub Pages.</div>
+                </div>
+            `;
+        }
+    }
+
+    carregarTodasBases();
+
+    function toggleButton() {
+        const input = document.getElementById("userInput");
+        const btn = document.getElementById("sendBtn");
+        if (input.value.trim().length > 0) {
+            btn.classList.add("active");
+            btn.disabled = false;
+        } else {
+            btn.classList.remove("active");
+            btn.disabled = true;
+        }
+    }
 
     async function sendMessage() {
         const inputField = document.getElementById("userInput");
@@ -45,18 +165,29 @@
 
         const messagesContainer = document.getElementById("messages");
         
-        // Exibe mensagem do usuário
-        messagesContainer.innerHTML += `<div class="message user">${messageText}</div>`;
+        // Adiciona mensagem do usuário
+        messagesContainer.innerHTML += `
+            <div class="message-wrapper user">
+                <div class="avatar">Você</div>
+                <div class="message-content">${escapeHtml(messageText)}</div>
+            </div>
+        `;
         inputField.value = "";
+        toggleButton();
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        // Exibe mensagem temporária de "carregando"
         const loadingId = "loading-" + Date.now();
-        messagesContainer.innerHTML += `<div id="${loadingId}" class="message bot">Pensando...</div>`;
+        messagesContainer.innerHTML += `
+            <div id="${loadingId}" class="message-wrapper bot">
+                <div class="avatar">AI</div>
+                <div class="message-content" style="color: var(--text-muted);">Pensando...</div>
+            </div>
+        `;
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        const systemInstruction = `Você é um assistente de suporte interno profissional. Responda estritamente com base nos dados fornecidos nos documentos abaixo:\n\n${baseDadosUnificada}`;
 
         try {
-            // Chamada direta para a API do Gemini (Modelo Flash)
             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -68,23 +199,40 @@
             });
 
             const data = await response.json();
-            const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Desculpe, ocorreu um erro ao processar sua resposta.";
+            const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Desculpe, ocorreu um erro.";
 
-            // Remove o "Pensando..." e coloca a resposta real
             document.getElementById(loadingId).remove();
-            messagesContainer.innerHTML += `<div class="message bot">${botReply.replace(/\n/g, '<br>')}</div>`;
+            messagesContainer.innerHTML += `
+                <div class="message-wrapper bot">
+                    <div class="avatar">AI</div>
+                    <div class="message-content">${formatarMarkdown(botReply)}</div>
+                </div>
+            `;
         } catch (error) {
             document.getElementById(loadingId).remove();
-            messagesContainer.innerHTML += `<div class="message bot">Erro de conexão com o servidor.</div>`;
+            messagesContainer.innerHTML += `
+                <div class="message-wrapper bot">
+                    <div class="avatar">AI</div>
+                    <div class="message-content">Erro de conexão com o servidor.</div>
+                </div>
+            `;
         }
 
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
     function handleKeyPress(event) {
-        if (event.key === "Enter") {
+        if (event.key === "Enter" && !document.getElementById("sendBtn").disabled) {
             sendMessage();
         }
+    }
+
+    function escapeHtml(text) {
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function formatarMarkdown(text) {
+        return escapeHtml(text).replace(/\n/g, '<br>');
     }
 </script>
 
