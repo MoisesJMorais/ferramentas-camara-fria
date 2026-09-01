@@ -34,7 +34,7 @@ function adicionarMensagem(texto, remetente) {
     bubbleDiv.classList.add('message-bubble');
     
     if (remetente === 'bot') {
-        bubbleDiv.innerHTML = `<div style="font-weight: 600; margin-bottom: 4px; color: #10a37f; font-size: 0.8rem;">Assistente Câmara Fria</div><div>${texto}</div>`;
+        bubbleDiv.innerHTML = `<div style="font-weight: 600; margin-bottom: 4px; color: #10a37f; font-size: 0.8rem;">Resposta</div><div>${texto}</div>`;
     } else {
         bubbleDiv.textContent = texto;
     }
