@@ -48,7 +48,7 @@ function adicionarMensagem(texto, remetente) {
 
 function processarResposta(textoUsuario) {
     const textoLimpo = textoUsuario.toLowerCase().trim();
-    let resposta = "Não encontrei informações específicas sobre isso no banco de dados. Tente perguntar sobre temperatura, EPIs ou emergências.";
+    let resposta = "Não encontrei informações específicas sobre isso no banco de dados.";
 
     for (let item of baseConhecimento) {
         for (let palavra of item.palavrasChave) {
@@ -57,7 +57,7 @@ function processarResposta(textoUsuario) {
                 break;
             }
         }
-        if (resposta !== "Não encontrei informações específicas sobre isso no banco de dados. Tente perguntar sobre temperatura, EPIs ou emergências.") {
+        if (resposta !== "Não encontrei informações específicas sobre isso no banco de dados.") {
             break;
         }
     }
