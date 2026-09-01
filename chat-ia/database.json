@@ -8,7 +8,15 @@
     "resposta": "O uso de EPI's é obrigatório: jaqueta e calça térmica ou macacão térmico, botinas com bico de ferro, touca balaclava e luvas apropriadas para baixa temperatura."
   },
   {
-    "palavrasChave": ["códigos", "codigos", "código", "codigo", "laranja integral", "laranja", "integral"],
-    "resposta": ["LARANJA INTEGRAL CX 200 ML --- 1010.200.000101", "LARANJA INTEGRAL PET 300 ML --- 1010.200.000035", "LARANJA INTEGRAL PET 900 ML --- 1010.200.000002"]
-  }
+    "palavrasChave": ["códigos de produtos laranja integral", "códigos nacionais"],
+    "resposta": "LARANJA INTEGRAL CX 200 ML --- 1010.200.000101""LARANJA INTEGRAL PET 900 ML --- 1010.200.000002"]
+  },
+  {
+    "palavrasChave": ["códigos de produtos laranja integral", "códigos nacionais"],
+    "resposta": "LARANJA INTEGRAL PET 300 ML ---► 1010.200.000035"
+  },
+  {
+    "palavrasChave": ["códigos de produtos laranja integral", "códigos nacionais"],
+    "resposta": "LARANJA INTEGRAL PET 900 ML ---► 1010.200.000002"
+  },
 ]
