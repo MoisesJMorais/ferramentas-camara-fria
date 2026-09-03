@@ -1,6 +1,10 @@
 ---
 ---
-<!-- Desenvolvido por Moisés J. M. Lima | WhatsApp (44) 99732-6752 -->
+<!--
+        Desenvolvido por Moisés J. M. Lima
+            WhatsApp (44) 99732-6752
+-->
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -24,9 +28,7 @@
             color: #ffffff;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-            overscroll-behavior-y: auto;
+            min-height: 100vh;
         }
 
         .icon-grid {
@@ -38,7 +40,7 @@
         /* CONTENT GRID */
         .content {
             flex: 1;
-            overflow-y: auto;
+            /* overflow-y: auto;*/ /*-> Pode remover se o body voltar a rolar naturalmente, ou manter se quiser scroll interno */
             padding: 16px;
             margin-top: 55px;
         }
