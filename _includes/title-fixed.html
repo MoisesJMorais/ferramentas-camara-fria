@@ -20,15 +20,32 @@
       left: 0;
       width: 100%;
       margin: 0;
-      padding: 5px 0;
+      padding: 8px 0;
       font-family: 'Poppins', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
       text-align: center;
-      text-transform: none;
       color: #FFFFFF;
       background-color: #000000;
       z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Estilo do Título Principal */
+    .title-fixed-ferramentas-camara-fria .main-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    /* Estilo do subtítulo (<p>) */
+    .title-fixed-ferramentas-camara-fria .subtitle {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: #b0b0b0; /* Um cinza claro para diferenciar */
+      margin: 2px 0 0 0;
     }
   
     .title-fixed-ferramentas-camara-fria::after {
@@ -41,30 +58,12 @@
       background: linear-gradient(to bottom, #004A97, rgba(0, 0, 0, 0));
       pointer-events: none;
     }
-
-/* Configurações de estilo para Smartphones */
-@media screen and (min-width: 481px) and (max-width: 768px) {
-    .title-fixed-ferramentas-camara-fria {
-      position: fixed;
-      text-decoration: none;
-      top: 0;
-      left: 0;
-      width: 100%;
-      margin: 0;
-      padding: 5px 0;
-      font-family: 'Poppins', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      text-align: center;
-      text-transform: none;
-      color: #FFFFFF;
-      background-color: #000000;
-      z-index: 1000;
-    }
-}
     
   </style>
   
   <header>
-    <a href="https://moisesjmorais.github.io/ferramentas-camara-fria/" class="title-fixed-ferramentas-camara-fria">Ferramentas Câmara Fria</a>
+    <a href="https://moisesjmorais.github.io/ferramentas-camara-fria/" class="title-fixed-ferramentas-camara-fria">
+      <span class="main-title">Ferramentas Câmara Fria</span>
+      <p class="subtitle">&copy; Todos os direitos reservados a Moisés J. Morais Lima.</p>
+    </a>
   </header>
