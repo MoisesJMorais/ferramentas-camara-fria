@@ -1,3 +1,7 @@
+<!--
+    Desenvolvido por Moisés J. M. Lima
+        WhatsApp: (44) 99732-6752
+-->
 ---
 ---
 <!DOCTYPE html>
@@ -5,7 +9,6 @@
 <head>
     {% include default-config.html %}
     <link rel="icon" type="image/x-icon" href="https://moisesjmorais.github.io/prats/camara-fria/favicons/lote-nfc-2026.ico">
-    
     <title>Lote do Dia</title>
 
     <style>
@@ -135,9 +138,8 @@
         #current-time { animation: pulse 2s infinite ease-in-out; }
     </style>
 </head>
-    {% include title-fixed.html %}
 <body>
-
+    {% include title-fixed.html %}
     <div class="container">
         <div class="main-display">
             <span id="current-date">-- DE -- DE ----</span>
@@ -196,6 +198,6 @@
         setInterval(atualizar, 30000);
         atualizar();
     </script>
-</body>
     {% include signature.html %}
+</body>
 </html>
