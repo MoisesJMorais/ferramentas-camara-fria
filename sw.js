@@ -1,4 +1,5 @@
-// Desenvolvido por Moisés J. M. Lima | WhatsApp (44) 99732-6752
+// Desenvolvido por Moisés J. M. Lima
+//     WhatsApp (44) 99732-6752
 
 const CACHE_NAME = 'ferramentas-camara-fria-pwa';
 // É essencial incluir a barra final e o index.html explicitando o subdiretório
