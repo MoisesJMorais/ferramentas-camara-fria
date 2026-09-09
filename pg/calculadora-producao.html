@@ -1,12 +1,14 @@
+<!--
+	Desenvolvido por Moisés J. M. Lima
+		WhatsApp: (44) 99732-6752
+-->
 ---
 ---
-<!-- Desenvolvido por Moisés J. M. Lima | WhatsApp (44) 99732-6752 -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     {% include default-config.html %}
     <link rel="icon" type="image/x-icon" href="../img/calculadora-producao.ico">
-    
     <title>Calculadora de Produção</title>
     
     <style>
@@ -31,7 +33,7 @@
 	    	    box-sizing: border-box;
         }
         .calculator {
-            width: 550px; /* Reduzido levemente já que tem menos colunas */
+            width: 550px;
             background: var(--calc-bg);
             padding: 20px;
             border-radius: 16px;
@@ -48,7 +50,7 @@
         }
         .labels {
             display: grid;
-            grid-template-columns: 1.2fr 2fr 1.5fr; /* Ajustado para 3 colunas */
+            grid-template-columns: 1.2fr 2fr 1.5fr;
             gap: 10px;
             padding: 0 10px 8px 10px;
             font-size: 0.65rem;
@@ -62,7 +64,7 @@
             padding: 10px;
             border-radius: 8px;
             display: grid;
-            grid-template-columns: 1.2fr 2fr 1.5fr; /* Ajustado para 3 colunas */
+            grid-template-columns: 1.2fr 2fr 1.5fr;
             gap: 10px;
             align-items: center;
             transition: background 0.2s;
@@ -84,7 +86,7 @@
         input:focus { border-color: var(--cyan); outline: none; color: var(--cyan); }
         .row-total {
             font-family: 'Consolas', monospace;
-            font-size: 1.3rem; /* Aumentado sutilmente para destaque */
+            font-size: 1.3rem;
             text-align: right;
         }
         .row-total.units { color: var(--cyan); font-weight: bold; }
@@ -95,7 +97,7 @@
             border-radius: 10px;
             border: 1px solid #222;
             display: flex;
-            justify-content: center; /* Centralizado já que é apenas um bloco */
+            justify-content: center;
         }
         .display-box { text-align: center; }
         .display-label { display: block; font-size: 0.65rem; color: #666; margin-bottom: 4px; text-transform: uppercase; }
@@ -105,9 +107,8 @@
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; }
     </style>
 </head>
-	{% include title-fixed.html %}
 <body>
-
+	{% include title-fixed.html %}
 <div class="calculator">
     <header>
         <h1 class="title-calculator">Calculadora de Produção</h1>
@@ -175,6 +176,6 @@
 	
 	    render();
 	</script>
-</body>
 	{% include signature.html %}
+</body>
 </html>
