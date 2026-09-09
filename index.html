@@ -18,13 +18,13 @@
     <style>
         * {
             box-sizing: border-box;
-            font-family: Roboto, system-ui, sans-serif;
             margin: 0;
             padding: 0;
         }
-
+		
         body {
             background: #1a1a1a;
+            
             color: #ffffff;
             display: flex;
             height: 100vh;
@@ -90,6 +90,7 @@
 
         .favorite-icon span {
             display: block;
+			font-family: Roboto, system-ui, sans-serif;
             font-size: 10px;
             font-weight: bold;
             word-break: break-word;
@@ -99,107 +100,107 @@
 </head>
 <body>
     {% include title-fixed.html %}
-<div class="content">
-    <div class="icon-grid" id="iconGrid">
-        <div class="favorite-icon hide-on-mobile" id="atalho-restrito" style="display: none;">
-            <a href="pg/gestao-de-reprocessos/login-rep-nfc.html" rel="noreferrer" onclick="window.open(this.href, 'REPNFC_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
-                <img src="img/favicon-rep-nfc.ico">
-                <span>Gestão de Reprocessos</span>
-            </a>
-        </div>
-        <div class="favorite-icon">
-            <a href="pg/calculadora-picking.html" target="_self" rel="noreferrer">
-                <img src="img/calculadora-picking.ico">
-                <span>Calcular Picking</span>
-            </a>
-        </div>
-        <div class="favorite-icon">
-            <a href="https://moisesjmorais.github.io/prats/camara-fria/calculadora-de-baias.html" target="_self" rel="noreferrer">
-                <img src="https://cdn-icons-png.flaticon.com/512/5396/5396758.png">
-                <span>Calcular Baias</span>
-            </a>
-        </div>
-        <div class="favorite-icon">
-            <a href="pg/calculadora-producao.html" target="_self" rel="noreferrer">
-                <img src="img/calculadora-producao.ico">
-                <span>Calcular Produção</span>
-            </a>
-        </div>
-        <div class="favorite-icon">
-            <a href="https://moisesjmorais.github.io/ferramentas-camara-fria/pg/lote-nfc-2026.html" target="_self" rel="noreferrer">
-                <img src="img/lote-nfc-2026.ico">
-                <span>Lote de Hoje</span>
-            </a>
-        </div>
-        <div class="favorite-icon">
-            <a href="https://calendar.online/bb0e974bdcaa29c13acc" target="_self" rel="noreferrer">
-                <img src="img/calendar-online.ico">
-                <span>Escala de Folgas 1°T</span>
-            </a>
-        </div>
-        <div class="favorite-icon">
-            <a href="https://calendar.online/e433c4af99f1a99aca1c" target="_self" rel="noreferrer">
-                <img src="img/calendar-online.ico">
-                <span>Escala de Folgas 2°T</span>
-            </a>
-        </div>
-        <div class="favorite-icon">
-            <a href="https://calendar.online/40d56d4d1cfb723b8ba3" target="_self" rel="noreferrer">
-                <img src="img/calendar-online.ico">
-                <span>Escala de Folgas 3°T</span>
-            </a>
-        </div>
-        <div class="favorite-icon">
-            <a href="http://10.1.1.29/" rel="noreferrer" onclick="window.open(this.href, 'SMDIA_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
-                <img src="https://moisesjmorais.github.io/prats/img/SMDIA.png">
-                <span>SMDIA</span>
-            </a>
-        </div>
-        <div class="favorite-icon">
-            <a href="https://app.smdia.com.br/supervisor.html" rel="noreferrer" onclick="window.open(this.href, 'SMDIA4_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
-                <img src="https://moisesjmorais.github.io/prats/camara-fria/icons/smdia4.ico">
-                <span>SMDIA 4.0</span>
-            </a>
-        </div>
-        <div class="favorite-icon">            
-            <a href="https://app.livemes.com/" rel="noreferrer" onclick="window.open(this.href, 'LiveMes_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">                
-                <img src="https://moisesjmorais.github.io/prats/img/livemes.jpg" rel="noreferrer">                
-                <span>LiveMes</span>            
-            </a>        
-        </div>
-        <div class="favorite-icon">
-            <a href="http://10.1.1.73:7070/dashboard/111-01-etiquetas" rel="noreferrer" onclick="window.open(this.href, 'METABASE_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
-                <img src="https://cdn-1.webcatalog.io/catalog/metabase/metabase-icon-filled-256.png?v=1714775110490">
-                <span>Etiquetas WMS</span>
-            </a>
-        </div>
-        <div class="favorite-icon">
-            <a href="https://sucospratsservices.engeman.com:30289/" rel="noreferrer" onclick="window.open(this.href, 'ENGEMAN_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
-                <img src="https://moisesjmorais.github.io/prats/img/engeman.png">
-                <span>Engeman</span>
-            </a>
-        </div>
-        <div class="favorite-icon">
-            <a href="https://suporte.prats.com.br/" rel="noreferrer" onclick="window.open(this.href, 'GLPI_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
-                <img src="https://archive.org/services/img/github.com-glpi-project-glpi_-_2019-09-23_08-18-36">
-                <span>Suporte GLPI</span>
-            </a>
-        </div>
-    </div>
-</div>
+	<div class="content">
+	    <div class="icon-grid" id="iconGrid">
+	        <div class="favorite-icon hide-on-mobile" id="atalho-restrito" style="display: none;">
+	            <a href="pg/gestao-de-reprocessos/login-rep-nfc.html" rel="noreferrer" onclick="window.open(this.href, 'REPNFC_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
+	                <img src="img/favicon-rep-nfc.ico">
+	                <span>Gestão de Reprocessos</span>
+	            </a>
+	        </div>
+	        <div class="favorite-icon">
+	            <a href="pg/calculadora-picking.html" target="_self" rel="noreferrer">
+	                <img src="img/calculadora-picking.ico">
+	                <span>Calcular Picking</span>
+	            </a>
+	        </div>
+	        <div class="favorite-icon">
+	            <a href="https://moisesjmorais.github.io/prats/camara-fria/calculadora-de-baias.html" target="_self" rel="noreferrer">
+	                <img src="https://cdn-icons-png.flaticon.com/512/5396/5396758.png">
+	                <span>Calcular Baias</span>
+	            </a>
+	        </div>
+	        <div class="favorite-icon">
+	            <a href="pg/calculadora-producao.html" target="_self" rel="noreferrer">
+	                <img src="img/calculadora-producao.ico">
+	                <span>Calcular Produção</span>
+	            </a>
+	        </div>
+	        <div class="favorite-icon">
+	            <a href="https://moisesjmorais.github.io/ferramentas-camara-fria/pg/lote-nfc-2026.html" target="_self" rel="noreferrer">
+	                <img src="img/lote-nfc-2026.ico">
+	                <span>Lote de Hoje</span>
+	            </a>
+	        </div>
+	        <div class="favorite-icon">
+	            <a href="https://calendar.online/bb0e974bdcaa29c13acc" target="_self" rel="noreferrer">
+	                <img src="img/calendar-online.ico">
+	                <span>Escala de Folgas 1°T</span>
+	            </a>
+	        </div>
+	        <div class="favorite-icon">
+	            <a href="https://calendar.online/e433c4af99f1a99aca1c" target="_self" rel="noreferrer">
+	                <img src="img/calendar-online.ico">
+	                <span>Escala de Folgas 2°T</span>
+	            </a>
+	        </div>
+	        <div class="favorite-icon">
+	            <a href="https://calendar.online/40d56d4d1cfb723b8ba3" target="_self" rel="noreferrer">
+	                <img src="img/calendar-online.ico">
+	                <span>Escala de Folgas 3°T</span>
+	            </a>
+	        </div>
+	        <div class="favorite-icon">
+	            <a href="http://10.1.1.29/" rel="noreferrer" onclick="window.open(this.href, 'SMDIA_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
+	                <img src="https://moisesjmorais.github.io/prats/img/SMDIA.png">
+	                <span>SMDIA</span>
+	            </a>
+	        </div>
+	        <div class="favorite-icon">
+	            <a href="https://app.smdia.com.br/supervisor.html" rel="noreferrer" onclick="window.open(this.href, 'SMDIA4_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
+	                <img src="https://moisesjmorais.github.io/prats/camara-fria/icons/smdia4.ico">
+	                <span>SMDIA 4.0</span>
+	            </a>
+	        </div>
+	        <div class="favorite-icon">            
+	            <a href="https://app.livemes.com/" rel="noreferrer" onclick="window.open(this.href, 'LiveMes_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">                
+	                <img src="https://moisesjmorais.github.io/prats/img/livemes.jpg" rel="noreferrer">                
+	                <span>LiveMes</span>            
+	            </a>        
+	        </div>
+	        <div class="favorite-icon">
+	            <a href="http://10.1.1.73:7070/dashboard/111-01-etiquetas" rel="noreferrer" onclick="window.open(this.href, 'METABASE_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
+	                <img src="https://cdn-1.webcatalog.io/catalog/metabase/metabase-icon-filled-256.png?v=1714775110490">
+	                <span>Etiquetas WMS</span>
+	            </a>
+	        </div>
+	        <div class="favorite-icon">
+	            <a href="https://sucospratsservices.engeman.com:30289/" rel="noreferrer" onclick="window.open(this.href, 'ENGEMAN_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
+	                <img src="https://moisesjmorais.github.io/prats/img/engeman.png">
+	                <span>Engeman</span>
+	            </a>
+	        </div>
+	        <div class="favorite-icon">
+	            <a href="https://suporte.prats.com.br/" rel="noreferrer" onclick="window.open(this.href, 'GLPI_Window', 'popup=yes,top=0,left=0,width=' + screen.availWidth + ',height=' + screen.availHeight, 'scrollbars=no'); return false;">
+	                <img src="https://archive.org/services/img/github.com-glpi-project-glpi_-_2019-09-23_08-18-36">
+	                <span>Suporte GLPI</span>
+	            </a>
+	        </div>
+	    </div>
+	</div>
 
-<script>
-    // Executa assim que a página carrega
-document.addEventListener("DOMContentLoaded", function() {
-    // Verifica se a chave secreta está salva no navegador e libera o atalho
-    if (localStorage.getItem("atalho_chave") === "ativo") {
-        document.getElementById("atalho-restrito").style.display = "block";
-    }
-});
+	<script>
+	    // Executa assim que a página carrega
+		document.addEventListener("DOMContentLoaded", function() {
+	    // Verifica se a chave secreta está salva no navegador e libera o atalho
+	    if (localStorage.getItem("atalho_chave") === "ativo") {
+	        document.getElementById("atalho-restrito").style.display = "block";
+	    }
+	});
 
     //Vincular o ServiceWorker
     if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+  	window.addEventListener('load', () => {
     // Atenção ao caminho completo por causa do subdiretório do GitHub Pages
     navigator.serviceWorker.register('/ferramentas-camara-fria/sw.js')
       .then(registration => {
@@ -207,10 +208,10 @@ document.addEventListener("DOMContentLoaded", function() {
       })
       .catch(error => {
         console.error('Falha ao registrar o Service Worker:', error);
-      });
-  });
-}
-</script>
+	      });
+	  });
+	}
+	</script>
     {% include signature.html %}
 </body>
 </html>
