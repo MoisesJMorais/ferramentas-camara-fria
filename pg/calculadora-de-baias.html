@@ -1,0 +1,342 @@
+---
+---
+
+<!--
+    Desenvolvido por Moisés J. M. Lima
+        WhatsApp: (44) 99732-6752
+-->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  {% include default-config.html %}
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/5396/5396758.png" type="image/x-icon">
+  <title>Calculadora de Baias</title>
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #1A1A1A;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .calculator-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .calculator-container {
+      background-color: #121212;
+      border: 1px solid #2A2A2A;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 550px;
+      padding: 30px;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+    }
+
+    .calculator-title {
+      color: #00e5ff;
+      font-size: 26px;
+      align-text: center;
+      margin: 0 0 8px 0;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .calculator-divider {
+      border: 0;
+      height: 1px;
+      background: #2A2A2A;
+      margin-bottom: 25px;
+    }
+
+    .calculator-form-group {
+      margin-bottom: 20px;
+    }
+
+    .calculator-label {
+      display: block;
+      color: #dddddd;
+      font-size: 14px;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .calculator-select, 
+    .calculator-input {
+      width: 100%;
+      padding: 12px;
+      background-color: #222222;
+      border: 1px solid #333333;
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    .calculator-select:focus, 
+    .calculator-input:focus {
+      outline: none;
+      border-color: #00e5ff;
+    }
+
+    .calculator-btn {
+      width: 100%;
+      padding: 14px;
+      background-color: #00e5ff;
+      border: none;
+      border-radius: 6px;
+      color: #121212;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+      margin-top: 10px;
+    }
+
+    .calculator-btn:hover {
+      background-color: #00b2cc;
+    }
+
+    .calculator-btn:active {
+      transform: scale(0.98);
+    }
+
+    .calculator-result {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px dashed #333333;
+      animation: calculatorFadeIn 0.4s ease;
+    }
+
+    @keyframes calculatorFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .calculator-summary {
+      background-color: #1A1A1A;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      border: 1px solid #252525;
+    }
+
+    .calculator-summary p {
+      margin: 5px 0;
+      color: #cccccc;
+      font-size: 15px;
+    }
+
+    .calculator-highlight {
+      color: #00e5ff;
+      font-weight: 700;
+    }
+
+    .calculator-table-caption {
+      color: #aaaaaa;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .calculator-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+    }
+
+    .calculator-table th, 
+    .calculator-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .calculator-table th {
+      background-color: #1A1A1A;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .calculator-table td {
+      color: #dddddd;
+      font-size: 14px;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      .calculator-container {
+        padding: 20px;
+      }
+      .calculator-title {
+        font-size: 22px;
+      }
+      .calculator-select, 
+      .calculator-input,
+      .calculator-btn {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  {% include title-fixed.html %}
+  <div class="calculator-wrapper">
+    <div class="calculator-container">
+      <h1 class="calculator-title">Calculadora de Baias</h1>
+      
+      <hr class="calculator-divider">
+
+      <div class="calculator-form-group">
+        <label class="calculator-label" for="skuSelect">Selecione o SKU:</label>
+        <select id="skuSelect" class="calculator-select">
+          <option value="200ML">200 ML (Pallet: 3.960 un)</option>
+          <option value="300ML">300 ML (Pallet: 2.880 un)</option>
+          <option value="900ML">900 ML (Pallet: 1.224 un)</option>
+          <option value="1.5LT">1.5 LT (Pallet: 600 un)</option>
+          <option value="3LT">3 LT (Pallet: 280 un)</option>
+          <option value="5LT">5 LT (Pallet: 168 un)</option>
+        </select>
+      </div>
+
+      <div class="calculator-form-group">
+        <label class="calculator-label" for="quantityInput">Quantidade de unidades da Ordem de Produção:</label>
+        <input type="number" id="quantityInput" class="calculator-input" placeholder="Ex: 10500" min="1" step="1">
+      </div>
+
+      <button id="calculateBtn" class="calculator-btn">Calcular Baias</button>
+
+      <div id="calculatorResult" class="calculator-result" style="display: none;">
+        
+        <div class="calculator-summary">
+          <p>Total de Unidades: <span id="resTotalUnits" class="calculator-highlight">0</span></p>
+          <p>Total de Pallets: <span id="resTotalPallets" class="calculator-highlight">0</span></p>
+        </div>
+
+        <p class="calculator-table-caption">Distribuição das baias:</p>
+        <table class="calculator-table">
+          <thead>
+            <tr>
+              <th>Tipo de Baia</th>
+              <th>Quantidade Necessária</th>
+            </tr>
+          </thead>
+          <tbody id="calculatorTableBody">
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Dados dos Pallets por SKU
+      const skuData = {
+        '200ML': 3960,
+        '300ML': 2880,
+        '900ML': 1224,
+        '1.5LT': 600,
+        '3LT': 280,
+        '5LT': 168
+      };
+
+      // Capacidade das baias ordenadas da maior para a menor
+      const baiaCapacities = [30, 25, 12, 8];
+
+      const calculateBtn = document.getElementById('calculateBtn');
+      const skuSelect = document.getElementById('skuSelect');
+      const quantityInput = document.getElementById('quantityInput');
+      const resultDiv = document.getElementById('calculatorResult');
+      
+      const resTotalUnits = document.getElementById('resTotalUnits');
+      const resTotalPallets = document.getElementById('resTotalPallets');
+      const tableBody = document.getElementById('calculatorTableBody');
+
+      calculateBtn.addEventListener('click', function() {
+        const selectedSku = skuSelect.value;
+        const inputVal = parseInt(quantityInput.value, 10);
+
+        // Validação simples
+        if (isNaN(inputVal) || inputVal <= 0) {
+          alert('Por favor, insira uma quantidade inteira válida de unidades (maior que 0).');
+          return;
+        }
+
+        const totalUnits = inputVal;
+        const unitsPerPallet = skuData[selectedSku];
+        
+        // Calcula quantidade de pallets arredondando para cima
+        const totalPallets = Math.ceil(totalUnits / unitsPerPallet);
+
+        // Algoritmo de distribuição das baias
+        let remainingPallets = totalPallets;
+        const baiaCount = { 30: 0, 25: 0, 12: 0, 8: 0 };
+
+        for (let capacity of baiaCapacities) {
+          if (remainingPallets >= capacity) {
+            baiaCount[capacity] = Math.floor(remainingPallets / capacity);
+            remainingPallets = remainingPallets % capacity;
+          }
+        }
+
+        // Se houver sobra, encaixa na menor baia que consiga suprir
+        if (remainingPallets > 0) {
+          if (remainingPallets <= 8) {
+            baiaCount[8]++;
+          } else if (remainingPallets <= 12) {
+            baiaCount[12]++;
+          } else if (remainingPallets <= 25) {
+            baiaCount[25]++;
+          } else {
+            baiaCount[30]++;
+          }
+        }
+
+        // Atualiza a interface
+        resTotalUnits.textContent = totalUnits.toLocaleString('pt-BR');
+        resTotalPallets.textContent = totalPallets.toLocaleString('pt-BR');
+
+        // Limpa e repovoa a tabela
+        tableBody.innerHTML = '';
+
+        baiaCapacities.forEach(capacity => {
+          if (baiaCount[capacity] > 0) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>Baia de ${capacity} Pallets</td>
+              <td><strong>${baiaCount[capacity]} baia(s)</strong></td>
+            `;
+            tableBody.appendChild(row);
+          }
+        });
+
+        // Mostra os resultados
+        resultDiv.style.display = 'block';
+      });
+    });
+  </script>
+  <br>
+  <br>
+  <br>
+  {% include signature.html %}
+</body>
+</html>
