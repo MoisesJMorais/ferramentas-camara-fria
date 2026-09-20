@@ -1,26 +1,18 @@
 [
   {
-    "palavrasChave": ["temperatura", "graus", "termostato", "frio"],
-    "resposta": "A temperatura ideal da câmara fria deve ser mantida entre 2°C e 4°C para resfriados como o Suco Prat's."
+    "keywords": ["temperatura ideal", "temperatura", "faixa de temperatura", "suco nfc", "resfriado"],
+    "response": "A faixa de temperatura ideal para o suco NFC resfriado é de 0°C a 4°C. Manter a câmara fria nessa faixa garante a conservação do produto e evita a degradação da qualidade."
   },
   {
-    "palavrasChave": ["epi", "roupa", "vestimenta", "proteção", "luva", "touca"],
-    "resposta": "O uso de EPI's é obrigatório: jaqueta e calça térmica ou macacão térmico, botinas com bico de ferro, touca balaclava e luvas apropriadas para baixa temperatura."
+    "keywords": ["codigos laranja integral nacional", "codigo laranja", "laranja integral nacional", "laranja nacional"],
+    "response": "Os códigos cadastrados para Laranja Integral Nacional são:\n\n• LIN-001: Laranja Integral Nacional (Tambor 200L)\n• LIN-002: Laranja Integral Nacional (Bag-in-Box 10L)\n• LIN-003: Laranja Integral Nacional (Granel)"
   },
   {
-    "palavrasChave": ["códigos de produtos laranja integral", "códigos nacionais"],
-    "resposta": "LARANJA INTEGRAL CX 200 ML = 1010.200.000101"
+    "keywords": ["ola", "oi", "bom dia", "boa tarde", "boa noite", "ajuda"],
+    "response": "Olá, Operador! Como posso ajudar você na gestão e consulta da Câmara Fria hoje?"
   },
   {
-    "palavrasChave": ["códigos de produtos laranja integral", "códigos nacionais"],
-    "resposta": "LARANJA INTEGRAL PET 300 ML = 1010.200.000035"
-  },
-  {
-    "palavrasChave": ["códigos de produtos laranja integral", "códigos nacionais"],
-    "resposta": "LARANJA INTEGRAL PET 900 ML = 1010.200.000002"
-  },
-  {
-    "palavrasChave": ["códigos de produtos laranja integral", "códigos nacionais"],
-    "resposta": "LARANJA INTEGRAL PET 1,5 LT = 1010.200.000086"
+    "keywords": ["limpeza", "higienizacao", "protocolo"],
+    "response": "Os protocolos de higienização da câmara fria devem ser realizados semanalmente com sanitizantes adequados para área alimentícia e registro em planilha de controle."
   }
 ]
