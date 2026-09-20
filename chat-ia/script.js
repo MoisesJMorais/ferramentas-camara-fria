@@ -1,110 +1,183 @@
-let baseConhecimento = [];
+// Variável que guardará os dados do JSON
+let knowledgeBase = [];
+const defaultResponse = "Desculpe, não encontrei essa informação na base de dados da Câmara Fria. Tente perguntar usando termos como 'temperatura ideal' ou 'códigos laranja integral nacional'.";
 
-async function carregarBaseDados() {
-    try {
-        const resposta = await fetch('database.json');
-        baseConhecimento = await resposta.json();
-    } catch (erro) {
-        console.error("Erro ao carregar banco de dados:", erro);
+// ====================================================
+// 1. CARREGAMENTO DO BANCO DE DADOS EXTERNO (JSON)
+// ====================================================
+async function carregarBancoDeDados() {
+  try {
+    const response = await fetch('database.json');
+    if (!response.ok) {
+      throw new Error(`Erro ao carregar JSON: ${response.status}`);
     }
+    knowledgeBase = await response.json();
+    console.log('Base de dados carregada com sucesso!');
+  } catch (error) {
+    console.error('Falha ao carregar a base de dados:', error);
+  }
 }
 
-function alternarTela(temMensagens) {
-    const welcomeScreen = document.getElementById('welcome-screen');
-    const messagesList = document.getElementById('messages-list');
-    
-    if (temMensagens) {
-        welcomeScreen.style.display = 'none';
-        messagesList.style.display = 'flex';
-    } else {
-        welcomeScreen.style.display = 'block';
-        messagesList.style.display = 'none';
-        messagesList.innerHTML = '';
-    }
+// Inicializa a leitura do arquivo JSON assim que o script carrega
+carregarBancoDeDados();
+
+// ====================================================
+// 2. MOTOR DE BUSCA / CORRESPONDÊNCIA
+// ====================================================
+function normalizeText(text) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Remove acentos
+    .replace(/[^\w\s]/gi, "");      // Remove pontuação
 }
 
-function adicionarMensagem(texto, remetente) {
-    alternarTela(true);
-    const messagesList = document.getElementById('messages-list');
-    
-    const rowDiv = document.createElement('div');
-    rowDiv.classList.add('message-row', remetente);
-    
-    const bubbleDiv = document.createElement('div');
-    bubbleDiv.classList.add('message-bubble');
-    
-    if (remetente === 'bot') {
-        bubbleDiv.innerHTML = `<div style="font-weight: 600; margin-bottom: 4px; color: #10a37f; font-size: 0.8rem;">Resposta</div><div>${texto}</div>`;
-    } else {
-        bubbleDiv.textContent = texto;
-    }
-    
-    rowDiv.appendChild(bubbleDiv);
-    messagesList.appendChild(rowDiv);
-    
-    const container = document.getElementById('chat-container');
-    container.scrollTop = container.scrollHeight;
-}
+function findBestResponse(userInput) {
+  if (!knowledgeBase || knowledgeBase.length === 0) {
+    return "A base de dados ainda está sendo carregada ou não foi encontrada. Tente novamente em alguns instantes.";
+  }
 
-function processarResposta(textoUsuario) {
-    const textoLimpo = textoUsuario.toLowerCase().trim();
+  const cleanInput = normalizeText(userInput);
+  const inputWords = cleanInput.split(/\s+/);
 
-    let respostasEncontradas = [];
+  let bestMatch = null;
+  let highestScore = 0;
 
-    for (let item of baseConhecimento) {
-        for (let palavra of item.palavrasChave) {
-            if (textoLimpo.includes(palavra.toLowerCase())) {
-                respostasEncontradas.push(item.resposta);
-                break;
-            }
+  knowledgeBase.forEach(item => {
+    let score = 0;
+    item.keywords.forEach(keyword => {
+      const cleanKeyword = normalizeText(keyword);
+      
+      // Match por frase completa
+      if (cleanInput.includes(cleanKeyword)) {
+        score += cleanKeyword.split(" ").length * 2;
+      }
+
+      // Match por palavra isolada
+      inputWords.forEach(word => {
+        if (cleanKeyword === word) {
+          score += 1;
         }
+      });
+    });
+
+    if (score > highestScore) {
+      highestScore = score;
+      bestMatch = item;
     }
+  });
 
-    let resposta;
-
-    if (respostasEncontradas.length > 0) {
-        resposta = respostasEncontradas.join("<br><br>");
-    } else {
-        resposta = "Não encontrei informações específicas sobre isso no banco de dados.";
-    }
-
-    setTimeout(() => {
-        adicionarMensagem(resposta, 'bot');
-    }, 400);
+  return highestScore > 0 ? bestMatch.response : defaultResponse;
 }
 
-function processarEnvio() {
-    const textarea = document.getElementById('user-input');
-    const texto = textarea.value.trim();
-    if (!texto) return;
+// ====================================================
+// 3. INTERAÇÃO E DOM
+// ====================================================
+const chatContainer = document.getElementById("chat-container");
+const messagesList = document.getElementById("messages-list");
+const welcomeScreen = document.getElementById("welcome-screen");
+const userInput = document.getElementById("user-input");
 
-    textarea.value = '';
-    textarea.style.height = 'auto';
-    
-    adicionarMensagem(texto, 'user');
-    processarResposta(texto);
-}
+// Redimensionamento automático do textarea
+userInput.addEventListener("input", () => {
+  userInput.style.height = "auto";
+  userInput.style.height = userInput.scrollHeight + "px";
+});
 
+// Envio ao teclar Enter (sem Shift)
+userInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    processarEnvio();
+  }
+});
+
+// Clique nos cards de sugestão
 function enviarSugestao(texto) {
-    adicionarMensagem(texto, 'user');
-    processarResposta(texto);
+  userInput.value = texto;
+  processarEnvio();
 }
 
+// Processador de envio
+function processarEnvio() {
+  const text = userInput.value.trim();
+  if (!text) return;
+
+  if (welcomeScreen && welcomeScreen.style.display !== "none") {
+    welcomeScreen.style.display = "none";
+  }
+
+  appendMessage("user", text);
+  userInput.value = "";
+  userInput.style.height = "auto";
+
+  const typingId = showTypingIndicator();
+
+  setTimeout(() => {
+    removeTypingIndicator(typingId);
+    const botResponse = findBestResponse(text);
+    appendMessage("bot", botResponse);
+  }, 500);
+}
+
+function appendMessage(sender, text) {
+  const msgDiv = document.createElement("div");
+  msgDiv.classList.add("message", sender);
+
+  const metaSpan = document.createElement("span");
+  metaSpan.classList.add("meta-tag");
+  metaSpan.textContent = sender === "user" ? "Operador" : "Assistente CF";
+
+  const contentDiv = document.createElement("div");
+  contentDiv.classList.add("content");
+  contentDiv.innerText = text;
+
+  msgDiv.appendChild(metaSpan);
+  msgDiv.appendChild(contentDiv);
+
+  messagesList.appendChild(msgDiv);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+function showTypingIndicator() {
+  const id = "typing-" + Date.now();
+  const msgDiv = document.createElement("div");
+  msgDiv.classList.add("message", "bot");
+  msgDiv.id = id;
+
+  const metaSpan = document.createElement("span");
+  metaSpan.classList.add("meta-tag");
+  metaSpan.textContent = "Assistente CF";
+
+  const contentDiv = document.createElement("div");
+  contentDiv.classList.add("content");
+  contentDiv.innerHTML = `
+    <div class="typing-indicator">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  `;
+
+  msgDiv.appendChild(metaSpan);
+  msgDiv.appendChild(contentDiv);
+  messagesList.appendChild(msgDiv);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+
+  return id;
+}
+
+function removeTypingIndicator(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+// Limpar conversa atual
 function limparChat() {
-    alternarTela(false);
+  messagesList.innerHTML = "";
+  if (welcomeScreen) {
+    welcomeScreen.style.display = "flex";
+  }
+  userInput.value = "";
+  userInput.style.height = "auto";
 }
-
-const textarea = document.getElementById('user-input');
-textarea.addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = (this.scrollHeight) + 'px';
-});
-
-textarea.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        processarEnvio();
-    }
-});
-
-carregarBaseDados();
