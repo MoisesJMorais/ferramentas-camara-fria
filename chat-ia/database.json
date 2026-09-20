@@ -1,11 +1,11 @@
 [
   {
     "keywords": ["temperatura ideal", "temperatura", "faixa de temperatura", "suco nfc", "resfriado"],
-    "response": "A faixa de temperatura ideal para o suco NFC resfriado é de 0°C a 4°C. Manter a câmara fria nessa faixa garante a conservação do produto e evita a degradação da qualidade."
+    "response": "A faixa de temperatura ideal para o suco NFC resfriado é de **0°C a 4°C**. Manter a câmara fria nessa faixa garante a conservação do produto e evita a degradação da qualidade."
   },
   {
     "keywords": ["codigos laranja integral nacional", "codigo laranja", "laranja integral nacional", "laranja nacional"],
-    "response": "Os códigos cadastrados para Laranja Integral Nacional são:\n\n• LIN-001: Laranja Integral Nacional (Tambor 200L)\n• LIN-002: Laranja Integral Nacional (Bag-in-Box 10L)\n• LIN-003: Laranja Integral Nacional (Granel)"
+    "response": "Os códigos cadastrados para Laranja Integral Nacional são:\n\n• **LIN-001**: Laranja Integral Nacional (Tambor 200L)\n• **LIN-002**: Laranja Integral Nacional (Bag-in-Box 10L)\n• **LIN-003**: Laranja Integral Nacional (Granel)"
   },
   {
     "keywords": ["ola", "oi", "bom dia", "boa tarde", "boa noite", "ajuda"],
