@@ -9,7 +9,7 @@
 <body>
     <div class="app-layout">
         <aside class="sidebar">
-            <button class="new-chat-btn" onclick="limparChat()">
+            <button id="new-chat-btn" class="new-chat-btn">
                 <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="16" width="16"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 Nova Conversa
             </button>
@@ -49,7 +49,7 @@
             <div class="input-container">
                 <div class="input-box">
                     <textarea id="user-input" rows="1" placeholder="Pergunte ao Assistente..."></textarea>
-                    <button id="send-btn" onclick="processarEnvio()">
+                    <button id="send-btn" type="button">
                         <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="16" width="16"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
                     </button>
                 </div>
@@ -57,6 +57,8 @@
             </div>
         </main>
     </div>
+
+    <!-- Script principal carregado ao final do body -->
     <script src="script.js"></script>
 </body>
 </html>
