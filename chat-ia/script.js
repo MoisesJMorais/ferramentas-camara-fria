@@ -1,200 +1,110 @@
-let knowledgeBase = [];
-const defaultResponse = "Desculpe, não encontrei essa informação na base de dados da Câmara Fria. Tente perguntar usando termos como 'temperatura ideal' ou 'códigos laranja integral nacional'.";
+let baseConhecimento = [];
 
-// ====================================================
-// 1. CARREGAMENTO DO BANCO DE DADOS (JSON)
-// ====================================================
-async function carregarBancoDeDados() {
-  try {
-    const response = await fetch('database.json');
-    if (!response.ok) {
-      throw new Error(`Status: ${response.status}`);
+async function carregarBaseDados() {
+    try {
+        const resposta = await fetch('database.json');
+        baseConhecimento = await resposta.json();
+    } catch (erro) {
+        console.error("Erro ao carregar banco de dados:", erro);
     }
-    knowledgeBase = await response.json();
-    console.log('Base de dados carregada com sucesso.');
-  } catch (error) {
-    console.error('Erro ao carregar o arquivo database.json:', error);
-  }
 }
 
-// Inicia a leitura da base de dados assim que a aplicação abre
-carregarBancoDeDados();
-
-// ====================================================
-// 2. MOTOR DE BUSCA E CORRESPONDÊNCIA
-// ====================================================
-function normalizeText(text) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^\w\s]/gi, "");
+function alternarTela(temMensagens) {
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const messagesList = document.getElementById('messages-list');
+    
+    if (temMensagens) {
+        welcomeScreen.style.display = 'none';
+        messagesList.style.display = 'flex';
+    } else {
+        welcomeScreen.style.display = 'block';
+        messagesList.style.display = 'none';
+        messagesList.innerHTML = '';
+    }
 }
 
-function findBestResponse(userInput) {
-  if (!knowledgeBase || knowledgeBase.length === 0) {
-    return "A base de dados ainda está sendo carregada ou não foi encontrada. Tente novamente em alguns instantes.";
-  }
+function adicionarMensagem(texto, remetente) {
+    alternarTela(true);
+    const messagesList = document.getElementById('messages-list');
+    
+    const rowDiv = document.createElement('div');
+    rowDiv.classList.add('message-row', remetente);
+    
+    const bubbleDiv = document.createElement('div');
+    bubbleDiv.classList.add('message-bubble');
+    
+    if (remetente === 'bot') {
+        bubbleDiv.innerHTML = `<div style="font-weight: 600; margin-bottom: 4px; color: #10a37f; font-size: 0.8rem;">Resposta</div><div>${texto}</div>`;
+    } else {
+        bubbleDiv.textContent = texto;
+    }
+    
+    rowDiv.appendChild(bubbleDiv);
+    messagesList.appendChild(rowDiv);
+    
+    const container = document.getElementById('chat-container');
+    container.scrollTop = container.scrollHeight;
+}
 
-  const cleanInput = normalizeText(userInput);
-  const inputWords = cleanInput.split(/\s+/);
+function processarResposta(textoUsuario) {
+    const textoLimpo = textoUsuario.toLowerCase().trim();
 
-  let bestMatch = null;
-  let highestScore = 0;
+    let respostasEncontradas = [];
 
-  knowledgeBase.forEach(item => {
-    let score = 0;
-    item.keywords.forEach(keyword => {
-      const cleanKeyword = normalizeText(keyword);
-      
-      // Avalia coincidência exata da expressão
-      if (cleanInput.includes(cleanKeyword)) {
-        score += cleanKeyword.split(" ").length * 2;
-      }
-
-      // Avalia coincidência por palavras isoladas
-      inputWords.forEach(word => {
-        if (cleanKeyword === word) {
-          score += 1;
+    for (let item of baseConhecimento) {
+        for (let palavra of item.palavrasChave) {
+            if (textoLimpo.includes(palavra.toLowerCase())) {
+                respostasEncontradas.push(item.resposta);
+                break;
+            }
         }
-      });
-    });
-
-    if (score > highestScore) {
-      highestScore = score;
-      bestMatch = item;
-    }
-  });
-
-  return highestScore > 0 ? bestMatch.response : defaultResponse;
-}
-
-// ====================================================
-// 3. INTERAÇÃO E MANIPULAÇÃO DA INTERFACE
-// ====================================================
-document.addEventListener("DOMContentLoaded", () => {
-  const chatContainer = document.getElementById("chat-container");
-  const messagesList = document.getElementById("messages-list");
-  const welcomeScreen = document.getElementById("welcome-screen");
-  const userInput = document.getElementById("user-input");
-  const sendBtn = document.getElementById("send-btn");
-  const newChatBtn = document.getElementById("new-chat-btn");
-
-  // Expansão dinâmica do textarea
-  if (userInput) {
-    userInput.addEventListener("input", () => {
-      userInput.style.height = "auto";
-      userInput.style.height = userInput.scrollHeight + "px";
-    });
-
-    // Envio com a tecla Enter
-    userInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        processarEnvio();
-      }
-    });
-  }
-
-  // Evento no botão de enviar
-  if (sendBtn) {
-    sendBtn.addEventListener("click", processarEnvio);
-  }
-
-  // Evento no botão Nova Conversa
-  if (newChatBtn) {
-    newChatBtn.addEventListener("click", limparChat);
-  }
-
-  // Função global para acionamento pelos cards da tela inicial
-  window.enviarSugestao = function(texto) {
-    if (userInput) {
-      userInput.value = texto;
-      processarEnvio();
-    }
-  };
-
-  function processarEnvio() {
-    const text = userInput.value.trim();
-    if (!text) return;
-
-    if (welcomeScreen && welcomeScreen.style.display !== "none") {
-      welcomeScreen.style.display = "none";
     }
 
-    appendMessage("user", text);
-    userInput.value = "";
-    userInput.style.height = "auto";
+    let resposta;
 
-    const typingId = showTypingIndicator();
+    if (respostasEncontradas.length > 0) {
+        resposta = respostasEncontradas.join("<br><br>");
+    } else {
+        resposta = "Não encontrei informações específicas sobre isso no banco de dados.";
+    }
 
     setTimeout(() => {
-      removeTypingIndicator(typingId);
-      const botResponse = findBestResponse(text);
-      appendMessage("bot", botResponse);
-    }, 500);
-  }
+        adicionarMensagem(resposta, 'bot');
+    }, 400);
+}
 
-  function appendMessage(sender, text) {
-    const msgDiv = document.createElement("div");
-    msgDiv.classList.add("message", sender);
+function processarEnvio() {
+    const textarea = document.getElementById('user-input');
+    const texto = textarea.value.trim();
+    if (!texto) return;
 
-    const metaSpan = document.createElement("span");
-    metaSpan.classList.add("meta-tag");
-    metaSpan.textContent = sender === "user" ? "Operador" : "Assistente CF";
+    textarea.value = '';
+    textarea.style.height = 'auto';
+    
+    adicionarMensagem(texto, 'user');
+    processarResposta(texto);
+}
 
-    const contentDiv = document.createElement("div");
-    contentDiv.classList.add("content");
-    contentDiv.innerText = text;
+function enviarSugestao(texto) {
+    adicionarMensagem(texto, 'user');
+    processarResposta(texto);
+}
 
-    msgDiv.appendChild(metaSpan);
-    msgDiv.appendChild(contentDiv);
+function limparChat() {
+    alternarTela(false);
+}
 
-    messagesList.appendChild(msgDiv);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-  }
-
-  function showTypingIndicator() {
-    const id = "typing-" + Date.now();
-    const msgDiv = document.createElement("div");
-    msgDiv.classList.add("message", "bot");
-    msgDiv.id = id;
-
-    const metaSpan = document.createElement("span");
-    metaSpan.classList.add("meta-tag");
-    metaSpan.textContent = "Assistente CF";
-
-    const contentDiv = document.createElement("div");
-    contentDiv.classList.add("content");
-    contentDiv.innerHTML = `
-      <div class="typing-indicator">
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-      </div>
-    `;
-
-    msgDiv.appendChild(metaSpan);
-    msgDiv.appendChild(contentDiv);
-    messagesList.appendChild(msgDiv);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-
-    return id;
-  }
-
-  function removeTypingIndicator(id) {
-    const el = document.getElementById(id);
-    if (el) el.remove();
-  }
-
-  function limparChat() {
-    messagesList.innerHTML = "";
-    if (welcomeScreen) {
-      welcomeScreen.style.display = "flex";
-    }
-    if (userInput) {
-      userInput.value = "";
-      userInput.style.height = "auto";
-    }
-  }
+const textarea = document.getElementById('user-input');
+textarea.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
 });
+
+textarea.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        processarEnvio();
+    }
+});
+
+carregarBaseDados();
