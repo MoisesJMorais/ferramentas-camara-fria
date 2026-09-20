@@ -8,8 +8,9 @@
 </head>
 <body>
     <div class="app-layout">
+        <!-- Sidebar lateral -->
         <aside class="sidebar">
-            <button id="new-chat-btn" class="new-chat-btn">
+            <button id="new-chat-btn" class="new-chat-btn" type="button">
                 <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="16" width="16"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 Nova Conversa
             </button>
@@ -21,6 +22,7 @@
             </div>
         </aside>
 
+        <!-- Área Principal -->
         <main class="main-content">
             <header class="top-bar">
                 <span class="model-badge">GPT (ChatBot Câmara Fria)</span>
@@ -30,6 +32,7 @@
             </header>
 
             <div id="chat-container" class="chat-viewport">
+                <!-- Tela Inicial -->
                 <div class="welcome-screen" id="welcome-screen">
                     <h1>Olá, posso ajudar?</h1>
                     <div class="suggestion-grid">
@@ -43,13 +46,16 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Lista dinâmica de mensagens -->
                 <div id="messages-list" class="messages-list"></div>
             </div>
 
+            <!-- Caixa de entrada de texto -->
             <div class="input-container">
                 <div class="input-box">
                     <textarea id="user-input" rows="1" placeholder="Pergunte ao Assistente..."></textarea>
-                    <button id="send-btn" type="button">
+                    <button id="send-btn" type="button" aria-label="Enviar">
                         <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="16" width="16"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
                     </button>
                 </div>
@@ -58,7 +64,6 @@
         </main>
     </div>
 
-    <!-- Script principal carregado ao final do body -->
     <script src="script.js"></script>
 </body>
 </html>
