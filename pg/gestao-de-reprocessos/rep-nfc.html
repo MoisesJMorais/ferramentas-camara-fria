@@ -182,7 +182,7 @@
                     <option value="Prod. Acabado">Prod. Acabado</option>
                 </select>
                 <input type="date" id="validade" title="Data de Validade">
-                <input type="text" id="motivo" placeholder="Motivo (Opcional)">
+                <input type="text" id="motivo" placeholder="Motivo/Observação (Opcional)">
                 <button class="btn-add" id="btnAcaoMain" onclick="adicionar()">Registrar</button>
             </div>
         </div>
@@ -211,7 +211,7 @@
             </select>
             <input type="date" id="fDataInicio" title="Data Inicial" onchange="irParaPagina(1)">
             <input type="date" id="fDataFim" title="Data Final" onchange="irParaPagina(1)">
-            <input type="text" id="fMotivo" placeholder="Motivo" onkeyup="irParaPagina(1)">
+            <input type="text" id="fMotivo" placeholder="Motivo/Observação" onkeyup="irParaPagina(1)">
         </div>
 
         <div class="info-bar">
@@ -233,7 +233,7 @@
                         <th>Entrada</th>
                         <th>Saída Status</th>
                         <th>Validade</th>
-                        <th class="col-motivo">Motivo</th>
+                        <th class="col-motivo">Motivo/Observação</th>
                         <th class="col-fixed-acoes">Ações</th>
                     </tr>
                 </thead>
@@ -557,7 +557,7 @@
         doc.setFontSize(10);
         doc.text(`Gestão de Reprocesos - Desenvolvido por Moisés J. M. Lima | Relatório gerado em: ${agora.toLocaleString('pt-BR')} | Total: ${dadosParaPdf.length}`, 40, 55);
 
-        const colunas = ["ID", "Status", "Lote", "SKU", "Sabor", "Qtd", "Tipo", "Entrada", "Saída", "Validade", "Motivo"];
+        const colunas = ["ID", "Status", "Lote", "SKU", "Sabor", "Qtd", "Tipo", "Entrada", "Saída", "Validade", "Motivo/Observação"];
         const linhas = dadosParaPdf.map(i => [
             i.id, i.status, i.lote, i.sku, i.sabor, i.qtd, i.unidade, i.dataEntrada, i.dataSaida || '-', i.validade.split('-').reverse().join('/'), i.motivo || ''
         ]);
