@@ -2,14 +2,11 @@
 
 const USUARIOS_PERMITIDOS = {
 	"moises.morais": "71239856",
-	"MOISES.MORAIS": "71239856",
 	"kenyi.aguirre": "abc123",
 	"eduardo.costa": "386511",
 	"jhonn.santos": "1910",
-	"geazi.mathias": "abc123",
 	"carlos.domingos": "@prats5000",
 	"otavio.godoy": "@prats5000",
-	"claudio.ribeiro": "146080",
 	"alex.floriani": "@prats5000",
 };
 
