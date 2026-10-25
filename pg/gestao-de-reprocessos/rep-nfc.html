@@ -555,7 +555,7 @@
                 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(10);
-        doc.text(`Gestão de Reprocesos - Desenvolvido por Moisés J. M. Lima | Relatório gerado em: ${agora.toLocaleString('pt-BR')} | Total: ${dadosParaPdf.length}`, 40, 55);
+        doc.text(`Gestão de Reprocesos - Desenvolvido por Moisés J. M. Lima<br>Relatório gerado em: ${agora.toLocaleString('pt-BR')} | Total: ${dadosParaPdf.length}`, 40, 55);
 
         const colunas = ["ID", "Status", "Lote", "SKU", "Sabor", "Qtd", "Tipo", "Entrada", "Saída", "Validade", "Motivo/Observação"];
         const linhas = dadosParaPdf.map(i => [
